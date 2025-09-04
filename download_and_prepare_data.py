@@ -69,7 +69,9 @@ STATIONS = {
     17491: "Berlin-Blankenfelde",
     19897: "Berlin-Friedrichshain-Nord",
     19898: "Berlin-Halensee",
+    721: "Schönwölkau-Brinnis",
 }
+
 
 def download_file(station_id):
     # Create output directory
@@ -139,11 +141,9 @@ def process(station_id):
 
     print(f"Processed data saved to {output_filepath}")
 
+
 if __name__ == '__main__':
     for station in STATIONS.keys():
         download_file(station)
         process(station)
         print('')
-
-
-
