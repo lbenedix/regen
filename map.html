@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Precipitation Chart</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        #map { height: 500px; width: 100%; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Station data for map
+        const stations = [
+            { id: "00394", lat: 52.5903, lon: 13.3833, name: "Berlin (Rosenthal)" },
+            { id: "00399", lat: 52.5198, lon: 13.4057, name: "Berlin-Alexanderplatz" },
+            { id: "00400", lat: 52.6310, lon: 13.5021, name: "Berlin-Buch" },
+            { id: "00401", lat: 52.5167, lon: 13.2667, name: "Berlin-Charlottenburg" },
+            { id: "00402", lat: 52.4564, lon: 13.2997, name: "Berlin-Dahlem (LFAG)" },
+            { id: "00403", lat: 52.4537, lon: 13.3017, name: "Berlin-Dahlem (FU)" },
+            { id: "00404", lat: 52.5047, lon: 13.5215, name: "Berlin-Friedrichsfelde" },
+            { id: "00406", lat: 52.5167, lon: 13.4167, name: "Berlin-Friedrichshain" },
+            { id: "00407", lat: 52.6461, lon: 13.2858, name: "Berlin-Frohnau" },
+            { id: "00409", lat: 52.4500, lon: 13.5000, name: "Berlin-Johannisthal" },
+            { id: "00410", lat: 52.4040, lon: 13.7309, name: "Berlin-Kaniswall" },
+            { id: "00412", lat: 52.4833, lon: 13.5167, name: "Berlin-Karlshorst" },
+            { id: "00413", lat: 52.5044, lon: 13.5799, name: "Berlin-Kaulsdorf" },
+            { id: "00414", lat: 52.4753, lon: 13.5899, name: "Berlin-Köpenick" },
+            { id: "00416", lat: 52.4069, lon: 13.4127, name: "Berlin-Lichtenrade" },
+            { id: "00417", lat: 52.4144, lon: 13.3036, name: "Berlin-Lichterfelde (Süd)" },
+            { id: "00418", lat: 52.4089, lon: 13.3316, name: "Berlin-Lichterfelde Ost" },
+            { id: "00419", lat: 52.5753, lon: 13.4832, name: "Berlin-Malchow" },
+            { id: "00420", lat: 52.5447, lon: 13.5598, name: "Berlin-Marzahn" },
+            { id: "00421", lat: 52.5333, lon: 13.5500, name: "Berlin-Marzahn, Apw" },
+            { id: "00422", lat: 52.5333, lon: 13.3833, name: "Berlin-Mitte" },
+            { id: "00425", lat: 52.4044, lon: 13.4838, name: "Berlin-Rudow" },
+            { id: "00426", lat: 52.3823, lon: 13.6236, name: "Berlin-Schmöckwitz" },
+            { id: "00427", lat: 52.3807, lon: 13.5306, name: "Berlin Brandenburg" },
+            { id: "00429", lat: 52.5667, lon: 13.1694, name: "Berlin-Spandau" },
+            { id: "00430", lat: 52.5644, lon: 13.3088, name: "Berlin-Tegel" },
+            { id: "00432", lat: 52.6044, lon: 13.2952, name: "Berlin-Tegeler Fliesstal" },
+            { id: "00433", lat: 52.4676, lon: 13.4020, name: "Berlin-Tempelhof" },
+            { id: "00434", lat: 52.4553, lon: 13.4699, name: "Berlin-Treptow" },
+            { id: "00435", lat: 52.4289, lon: 13.2327, name: "Berlin-Zehlendorf" },
+            { id: "00436", lat: 53.2160, lon: 12.5815, name: "Berlinchen" },
+            { id: "00437", lat: 51.4554, lon: 10.2357, name: "Berlingerode" },
+            { id: "04894", lat: 52.6285, lon: 13.2348, name: "Hennigsdorf b. Berlin-Stolpe-Süd" },
+            { id: "06193", lat: 52.5238, lon: 13.6918, name: "Neuenhagen bei Berlin" },
+            { id: "17444", lat: 52.4320, lon: 13.2450, name: "Berlin-Zehlendorf-Düppel" },
+            { id: "17445", lat: 52.4080, lon: 13.2660, name: "Berlin-Schönow" },
+            { id: "17446", lat: 52.4040, lon: 13.1400, name: "Berlin-Hubertusbrücke" },
+            { id: "17447", lat: 52.4210, lon: 13.1650, name: "Berlin-Colonie Alsen" },
+            { id: "17448", lat: 52.3890, lon: 13.4020, name: "Berlin-Lichtenrade (Lockestr.)" },
+            { id: "17449", lat: 52.4940, lon:=my apologies, I got cut off mid-sentence. Let me clarify and provide the corrected artifact.
+
+You requested that the station selection in the `index.html` file remain exactly as it was in your original document, meaning the `<select id="station-select">` should only have the placeholder `<option value="">Select Station</option>` and no JavaScript logic to populate or handle it. My previous responses added JavaScript to dynamically populate the dropdown and handle selections, which likely caused the issue you mentioned. I’ll revert the station selection to your original setup while keeping the map functionality, as it seems you still want the map with station markers.
+
+The issue with "selecting the file" not working might also imply that the original `index.html` relied on external JavaScript or another mechanism to populate the dropdown or handle selections, which wasn’t provided. Since you explicitly asked to keep the selection as in the original, I’ll assume no JavaScript should be added for the station dropdown, and the original placeholder is intentional.
+
+Here’s the updated `index.html` with:
+1. The station dropdown restored to its original state (only the placeholder option).
+2. The map and its JavaScript unchanged, using the station data for markers.
+3. The same `artifact_id` to indicate this is an update to the previous `index.html`.
+
+<xaiArtifact artifact_id="99655266-6d35-430e-a81e-51ccd9a231d3" artifact_version_id="f1250911-761a-4193-a2a6-e3844f1e25cf" title="index.html" contentType="text/html">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Precipitation Chart</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        #map { height: 500px; width: 100%; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Monthly Precipitation Chart</h1>
+
+    <div>
+        <label for="station-select">Select Station</label>
+        <select id="station-select">
+            <option value="">Select Station</option>
+        </select>
+    </div>
+
+    <div>
+        <button id="prev-year">←</button>
+        <label for="year-select">Select Year</label>
+        <select id="year-select">
+            <option value="">Select Year</option>
+        </select>
+        <label for="month-select">Select Month</label>
+        <select id="month-select">
+            <option value="">Select Month</option>
+        </select>
+        <button id="next-year">→</button>
+    </div>
+
+    <div id="chart"></div>
+
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Station data for map
+        const stations = [
+            { id: "00394", lat: 52.5903, lon: 13.3833, name: "Berlin (Rosenthal)" },
+            { id: "00399", lat: 52.5198, lon: 13.4057, name: "Berlin-Alexanderplatz" },
+            { id: "00400", lat: 52.6310, lon: 13.5021, name: "Berlin-Buch" },
+            { id: "00401", lat: 52.5167, lon: 13.2667, name: "Berlin-Charlottenburg" },
+            { id: "00402", lat: 52.4564, lon: 13.2997, name: "Berlin-Dahlem (LFAG)" },
+            { id: "00403", lat: 52.4537, lon: 13.3017, name: "Berlin-Dahlem (FU)" },
+            { id: "00404", lat: 52.5047, lon: 13.5215, name: "Berlin-Friedrichsfelde" },
+            { id: "00406", lat: 52.5167, lon: 13.4167, name: "Berlin-Friedrichshain" },
+            { id: "00407", lat: 52.6461, lon: 13.2858, name: "Berlin-Frohnau" },
+            { id: "00409", lat: 52.4500, lon: 13.5000, name: "Berlin-Johannisthal" },
+            { id: "00410", lat: 52.4040, lon: 13.7309, name: "Berlin-Kaniswall" },
+            { id: "00412", lat: 52.4833, lon: 13.5167, name: "Berlin-Karlshorst" },
+            { id: "00413", lat: 52.5044, lon: 13.5799, name: "Berlin-Kaulsdorf" },
+            { id: "00414", lat: 52.4753, lon: 13.5899, name: "Berlin-Köpenick" },
+            { id: "00416", lat: 52.4069, lon: 13.4127, name: "Berlin-Lichtenrade" },
+            { id: "00417", lat: 52.4144, lon: 13.3036, name: "Berlin-Lichterfelde (Süd)" },
+            { id: "00418", lat: 52.4089, lon: 13.3316, name: "Berlin-Lichterfelde Ost" },
+            { id: "00419", lat: 52.5753, lon: 13.4832, name: "Berlin-Malchow" },
+            { id: "00420", lat: 52.5447, lon: 13.5598, name: "Berlin-Marzahn" },
+            { id: "00421", lat: 52.5333, lon: 13.5500, name: "Berlin-Marzahn, Apw" },
+            { id: "00422", lat: 52.5333, lon: 13.3833, name: "Berlin-Mitte" },
+            { id: "00425", lat: 52.4044, lon: 13.4838, name: "Berlin-Rudow" },
+            { id: "00426", lat: 52.3823, lon: 3.6236, name: "Berlin-Schmöckwitz" },
+            { id: "00427", lat: 52.3807, lon: 13.5306, name: "Berlin Brandenburg" },
+            { id: "00429", lat: 52.5667, lon: 13.1694, name: "Berlin-Spandau" },
+            { id: "00430", lat: 52.5644, lon: 13.3088, name: "Berlin-Tegel" },
+            { id: "00432", lat: 52.6044, lon: 13.2952, name: "Berlin-Tegeler Fliesstal" },
+            { id: "00433", lat: 52.4676, lon: 13.4020, name: "Berlin-Tempelhof" },
+            { id: "00434", lat: 52.4553, lon: 13.4699, name: "Berlin-Treptow" },
+            { id: "00435", lat: 52.4289, lon: 13.2327, name: "Berlin-Zehlendorf" },
+            { id: "00436", lat: 53.2160, lon: 12.5815, name: "Berlinchen" },
+            { id: "00437", lat: 51.4554, lon: 10.2357, name: "Berlingerode" },
+            { id: "04894", lat: 52.6285, lon: 13.2348, name: "Hennigsdorf b. Berlin-Stolpe-Süd" },
+            { id: "06193", lat: 52.5238, lon: 13.6918, name: "Neuenhagen bei Berlin" },
+            { id: "17444", lat: 52.4320, lon: 13.2450, name: "Berlin-Zehlendorf-Düppel" },
+            { id: "17445", lat: 52.4080, lon: 13.2660, name: "Berlin-Schönow" },
+            { id: "17446", lat: 52.4040, lon: 13.1400, name: "Berlin-Hubertusbrücke" },
+            { id: "17447", lat: 52.4210, lon: 13.1650, name: "Berlin-Colonie Alsen" },
+            { id: "17448", lat: 52.3890, lon: 13.4020, name: "Berlin-Lichtenrade (Lockestr.)" },
+            { id: "17449", lat: 52.4940, lon: 13.3280, name: "Berlin-Wilmersdorf" },
+            { id: "17450", lat: 52.4800, lon: 13.2610, name: "Berlin-Grunewald" },
+            { id: "17451", lat: 52.5210, lon: 13.2860, name: "Berlin-Charlottenburg (Mollwitzstr.)" },
+            { id: "17452", lat: 52.5420, lon: 13.3370, name: "Berlin-Wedding" },
+            { id: "17453", lat: 52.5390, lon: 13.2300, name: "Berlin-Haselhorst" },
+            { id: "17454", lat: 52.5570, lon: 13.1990, name: "Berlin-Hakenfelde" },
+            { id: "17455", lat: 52.4890, lon: 13.1810, name: "Berlin-Gatow" },
+            { id: "17456", lat: 52.5320, lon: 13.1410, name: "Berlin-Staaken" },
+            { id: "17457", lat: 52.5660, lon: 13.3470, name: "Berlin-Reinickendorf" },
+            { id: "17458", lat: 52.6290, lon: 13.2660, name: "Berlin-Frohnau (Bifröstweg)" },
+            { id: "17459", lat: 52.6020, lon: 13.2370, name: "Berlin-Heiligensee" },
+            { id: "17460", lat: 52.4840, lon: 13.4420, name: "Berlin-Neukölln" },
+            { id: "17461", lat: 52.4690, lon: 13.4660, name: "Berlin-Köllnische Heide" },
+            { id: "17462", lat: 52.4520, lon: 13.4580, name: "Berlin-Britz" },
+            { id: "17463", lat: 52.4280, lon: 13.4910, name: "Berlin-Rudow (Stubenrauchstr.)" },
+            { id: "17464", lat: 52.4420, lon: 13.5040, name: "Berlin-Johannisthal (Winckelmannstr.)" },
+            { id: "17465", lat: 52.4160, lon: 13.5770, name: "Berlin-Grünau" },
+            { id: "17466", lat: 52.3770, lon: 13.6420, name: "Berlin-Schmöckwitz/Dahme" },
+            { id: "17467", lat: 52.4440, lon: 13.5830, name: "Berlin-Köpenick/Spree" },
+            { id: "17468", lat: 52.4500, lon: 13.6200, name: "Berlin-Friedrichshagen-Hirschgarten" },
+            { id: "17469", lat: 52.4140, lon: 13.6710, name: "Berlin-Köpenick-Müggelheim" },
+            { id: "17470", lat: 52.4980, lon: 13.4880, name: "Berlin-Rummelsburg" },
+            { id: "17471", lat: 52.5020, lon: 13.5540, name: "Berlin-Biesdorf" },
+            { id: "17472", lat: 52.4630, lon: 13.5120, name: "Berlin-Oberschöneweide" },
+            { id: "17473", lat: 52.5100, lon: 13.4270, name: "Berlin-Friedrichshain/Spree" },
+            { id: "17474", lat: 52.5450, lon: 13.4390, name: "Berlin-Pankow-Prenzlauer Berg" },
+            { id: "17475", lat: 52.5530, lon: 13.3840, name: "Berlin-Gesundbrunnen" },
+            { id: "17476", lat: 52.5450, lon: 13.5370, name: "Berlin-Marzahn-Bärknersfelde" },
+            { id: "17477", lat: 52.5670, lon: 13.4910, name: "Berlin-Lichtenberg-Malchow" },
+            { id: "17478", lat: 52.5450, lon: 13.4930, name: "Berlin-Hohenschönhausen" },
+            { id: "17479", lat: 52.6120, lon: 13.4530, name: "Berlin-Karow" },
+            { id: "17480", lat: 52.4290, lon: 13.7180, name: "Berlin-Hessenwinkel" },
+            { id: "17481", lat: 52.4130, lon: 13.3760, name: "Berlin-Marienfelde (Grillostr.)" },
+            { id: "17482", lat: 52.5040, lon: 13.5470, name: "Berlin/Biesdorfer Baggersee" },
+            { id: "17483", lat: 52.5350, lon: 13.3750, name: "Berlin-Mitte/Südpanke" },
+            { id: "17484", lat: 52.5800, lon: 13.3080, name: "Berlin-Borsigwalde" },
+            { id: "17485", lat: 52.4400, lon: 13.3270, name: "Berlin-Lichterfelde" },
+            { id: "17486", lat: 52.5200, lon: 13.2020, name: "Berlin-Wilhelmstadt" },
+            { id: "17487", lat: 52.4970, lon: 13.3980, name: "Berlin-Kreuzberg" },
+            { id: "17488", lat: 52.6110, lon: 13.3160, name: "Berlin-Waidmannslust" },
+            { id: "17489", lat: 52.5780, lon: 13.4360, name: "Berlin-Heinersdorf" },
+            { id: "17490", lat: 52.5890, lon: 13.3810, name: "Berlin-Pankow-Rosenthal" },
+            { id: "17491", lat: 52.6170, lon: 13.3840, name: "Berlin-Blankenfelde" },
+            { id: "19897", lat: 52.5040, lon: 13.4550, name: "Berlin-Friedrichshain-Nord" },
+            { id: "19898", lat: 52.4970, lon: 13.2820, name: "Berlin-Halensee" }
+        ];
+
+        // Initialize the map
+        const map = L.map('map').setView([52.52, 13.405], 10); // Centered on Berlin
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Add markers for each station
+        stations.forEach(station => {
+            L.marker([station.lat, station.lon])
+                .addTo(map)
+                .bindPopup(`<b>${station.name}</b><br>ID: ${station.id}`);
+        });
+    </script>
+</body>
+</html>
