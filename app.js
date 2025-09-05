@@ -246,12 +246,23 @@ function addAllStationMarkers() {
 }
 
 function selectStationFromMap(stationId) {
+    // Save current year and month selections
+    const currentYear = document.getElementById('yearSelect').value;
+    const currentMonth = document.getElementById('monthSelect').value;
+
     // Update the dropdown selection
     const stationSelect = document.getElementById('stationSelect');
     stationSelect.value = stationId;
 
-    // Trigger the station change handler
-    handleStationChange();
+    // Update station info without resetting the date
+    updateStationInfo(stationId);
+
+    // Restore the year and month selections
+    document.getElementById('yearSelect').value = currentYear;
+    document.getElementById('monthSelect').value = currentMonth;
+
+    // Load station data with the preserved year and month
+    loadStationData(stationId);
 }
 
 function updateStationInfo(stationId) {
@@ -350,9 +361,6 @@ function loadStationData(stationId) {
         document.getElementById('statsContainer').classList.remove('visible');
         return;
     }
-
-    // Show loading spinner
-    document.getElementById('loadingSpinner').style.display = 'block';
 
     const fileName = `data/rain_data_${stationId.padStart(5, '0')}.json`;
     const cacheKey = `${stationId}-${year}-${month}`;
@@ -695,3 +703,6 @@ window.addEventListener('resize', debounceResize);
 if (typeof Chart === 'undefined') {
     showToast('Chart.js failed to load. Please check your internet connection or the CDN link.', 'error');
 }
+
+// Initialize the initial load flag
+APP_STATE.initialLoadComplete = false;
