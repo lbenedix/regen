@@ -115,75 +115,49 @@
     }
     moment.locale('de');
 
-    const STATIONS = {
-        400: "Berlin-Buch",
-        403: "Berlin-Dahlem (FU)",
-        420: "Berlin-Marzahn",
-        426: "Berlin-Schmöckwitz",
-        433: "Berlin-Tempelhof",
-        17444: "Berlin-Zehlendorf-Düppel",
-        17445: "Berlin-Schönow",
-        17446: "Berlin-Hubertusbrücke",
-        17447: "Berlin-Colonie Alsen",
-        17448: "Berlin-Lichtenrade (Lockestr.)",
-        17449: "Berlin-Wilmersdorf",
-        17450: "Berlin-Grunewald",
-        17451: "Berlin-Charlottenburg (Mollwitzstr.)",
-        17452: "Berlin-Wedding",
-        17453: "Berlin-Haselhorst",
-        17454: "Berlin-Hakenfelde",
-        17455: "Berlin-Gatow",
-        17456: "Berlin-Staaken",
-        17457: "Berlin-Reinickendorf",
-        17458: "Berlin-Frohnau (Bifröstweg)",
-        17459: "Berlin-Heiligensee",
-        17460: "Berlin-Neukölln",
-        17461: "Berlin-Köllnische Heide",
-        17462: "Berlin-Britz",
-        17463: "Berlin-Rudow (Stubenrauchstr.)",
-        17464: "Berlin-Johannisthal (Winckelmannstr.)",
-        17465: "Berlin-Grünau",
-        17466: "Berlin-Schmöckwitz/Dahme",
-        17467: "Berlin-Köpenick/Spree",
-        17468: "Berlin-Friedrichshagen-Hirschgarten",
-        17469: "Berlin-Köpenick-Müggelheim",
-        17470: "Berlin-Rummelsburg",
-        17471: "Berlin-Biesdorf",
-        17472: "Berlin-Oberschöneweide",
-        17473: "Berlin-Friedrichshain/Spree",
-        17474: "Berlin-Pankow-Prenzlauer Berg",
-        17475: "Berlin-Gesundbrunnen",
-        17476: "Berlin-Marzahn-Bürknersfelde",
-        17477: "Berlin-Lichtenberg-Malchow",
-        17478: "Berlin-Hohenschönhausen",
-        17479: "Berlin-Karow",
-        17480: "Berlin-Hessenwinkel",
-        17481: "Berlin-Marienfelde (Grillostr.)",
-        17482: "Berlin/Biesdorfer Baggersee",
-        17483: "Berlin-Mitte/Südpanke",
-        17484: "Berlin-Borsigwalde",
-        17485: "Berlin-Lichterfelde",
-        17486: "Berlin-Wilhelmstadt",
-        17487: "Berlin-Kreuzberg",
-        17488: "Berlin-Waidmannslust",
-        17489: "Berlin-Heinersdorf",
-        17490: "Berlin-Pankow-Rosenthal",
-        17491: "Berlin-Blankenfelde",
-        19897: "Berlin-Friedrichshain-Nord",
-        19898: "Berlin-Halensee",
-        721: "Schönwölkau-Brinnis"
-    };
+    let STATIONS = {};
 
-    // Populate station dropdown, sorted alphabetically by name
-    const stationSelect = document.getElementById('stationSelect');
-    Object.entries(STATIONS)
-        .sort((a, b) => a[1].localeCompare(b[1]))
-        .forEach(([id, name]) => {
-            const option = document.createElement('option');
-            option.value = id;
-            option.textContent = name;
-            stationSelect.appendChild(option);
+    // Load stations from GeoJSON file
+    fetch('stations.geojson')
+        .then(response => response.json())
+        .then(geojsonData => {
+            // Extract stations that match our desired station IDs
+            const desiredStationIds = new Set([400, 403, 420, 426, 433, 17444, 17445, 17446, 17447, 17448, 17449, 17450, 
+                                              17451, 17452, 17453, 17454, 17455, 17456, 17457, 17458, 17459, 17460, 17461, 
+                                              17462, 17463, 17464, 17465, 17466, 17467, 17468, 17469, 17470, 17471, 17472, 
+                                              17473, 17474, 17475, 17476, 17477, 17478, 17479, 17480, 17481, 17482, 17483, 
+                                              17484, 17485, 17486, 17487, 17488, 17489, 17490, 17491, 19897, 19898, 721]);
+            
+            geojsonData.features.forEach(feature => {
+                const stationId = parseInt(feature.properties.station_id);
+                if (desiredStationIds.has(stationId)) {
+                    STATIONS[stationId] = feature.properties.station_name;
+                }
+            });
+            
+            populateStationDropdown();
+        })
+        .catch(error => {
+            console.error('Error loading stations:', error);
+            alert('Error loading station data');
         });
+
+    function populateStationDropdown() {
+        // Populate station dropdown, sorted alphabetically by name
+        const stationSelect = document.getElementById('stationSelect');
+        Object.entries(STATIONS)
+            .sort((a, b) => a[1].localeCompare(b[1]))
+            .forEach(([id, name]) => {
+                const option = document.createElement('option');
+                option.value = id;
+                option.textContent = name;
+                stationSelect.appendChild(option);
+            });
+        
+        // Set default station after loading
+        stationSelect.value = "19897";
+        handleStationChange();
+    }
 
     // Populate year dropdown (2020-2025)
     const yearSelect = document.getElementById('yearSelect');
@@ -425,9 +399,6 @@
         touchStartX = null;
         touchStartY = null;
     });
-
-    stationSelect.value = "19897";
-    handleStationChange();
 </script>
 </body>
 </html>

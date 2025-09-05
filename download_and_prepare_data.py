@@ -3,74 +3,25 @@ import json
 import os
 import requests
 import zipfile
-from io import BytesIO
 from datetime import datetime
-import unicodedata
-import logging
-from time import sleep
+
+# Load stations from GeoJSON file
+with open('stations.geojson', 'r', encoding='utf-8') as f:
+    geojson_data = json.load(f)
+
+STATIONS = {}
+for feature in geojson_data['features']:
+    station_id = int(feature['properties']['station_id'])
+    if "Berlin" not in feature['properties']['station_name']:
+        continue
+
+    if int(datetime.now().strftime('%Y%m')) > int(feature['properties']['end_date'][:6]):
+        continue
+
+    STATIONS[station_id] = feature['properties']['station_name']
 
 BASE_URL = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/daily/more_precip/recent/"
 OUTPUT_DIR = "data"
-
-# List of Berlin station IDs
-STATIONS = {
-    400: "Berlin-Buch",
-    403: "Berlin-Dahlem (FU)",
-    420: "Berlin-Marzahn",
-    426: "Berlin-Schmöckwitz",
-    433: "Berlin-Tempelhof",
-    17444: "Berlin-Zehlendorf-Düppel",
-    17445: "Berlin-Schönow",
-    17446: "Berlin-Hubertusbrücke",
-    17447: "Berlin-Colonie Alsen",
-    17448: "Berlin-Lichtenrade (Lockestr.)",
-    17449: "Berlin-Wilmersdorf",
-    17450: "Berlin-Grunewald",
-    17451: "Berlin-Charlottenburg (Mollwitzstr.)",
-    17452: "Berlin-Wedding",
-    17453: "Berlin-Haselhorst",
-    17454: "Berlin-Hakenfelde",
-    17455: "Berlin-Gatow",
-    17456: "Berlin-Staaken",
-    17457: "Berlin-Reinickendorf",
-    17458: "Berlin-Frohnau (Bifröstweg)",
-    17459: "Berlin-Heiligensee",
-    17460: "Berlin-Neukölln",
-    17461: "Berlin-Köllnische Heide",
-    17462: "Berlin-Britz",
-    17463: "Berlin-Rudow (Stubenrauchstr.)",
-    17464: "Berlin-Johannisthal (Winckelmannstr.)",
-    17465: "Berlin-Grünau",
-    17466: "Berlin-Schmöckwitz/Dahme",
-    17467: "Berlin-Köpenick/Spree",
-    17468: "Berlin-Friedrichshagen-Hirschgarten",
-    17469: "Berlin-Köpenick-Müggelheim",
-    17470: "Berlin-Rummelsburg",
-    17471: "Berlin-Biesdorf",
-    17472: "Berlin-Oberschöneweide",
-    17473: "Berlin-Friedrichshain/Spree",
-    17474: "Berlin-Pankow-Prenzlauer Berg",
-    17475: "Berlin-Gesundbrunnen",
-    17476: "Berlin-Marzahn-Bürknersfelde",
-    17477: "Berlin-Lichtenberg-Malchow",
-    17478: "Berlin-Hohenschönhausen",
-    17479: "Berlin-Karow",
-    17480: "Berlin-Hessenwinkel",
-    17481: "Berlin-Marienfelde (Grillostr.)",
-    17482: "Berlin/Biesdorfer Baggersee",
-    17483: "Berlin-Mitte/Südpanke",
-    17484: "Berlin-Borsigwalde",
-    17485: "Berlin-Lichterfelde",
-    17486: "Berlin-Wilhelmstadt",
-    17487: "Berlin-Kreuzberg",
-    17488: "Berlin-Waidmannslust",
-    17489: "Berlin-Heinersdorf",
-    17490: "Berlin-Pankow-Rosenthal",
-    17491: "Berlin-Blankenfelde",
-    19897: "Berlin-Friedrichshain-Nord",
-    19898: "Berlin-Halensee",
-    721: "Schönwölkau-Brinnis",
-}
 
 
 def download_file(station_id):
@@ -111,6 +62,10 @@ def process(station_id):
             input_filename = fname
             break
 
+    if input_filename is None:
+        print(f"No input file found for station {station_id_str}.")
+        return
+
     input_filepath = os.path.join(OUTPUT_DIR, input_filename) if input_filename else None
 
     output_filename = f"rain_data_{station_id_str}.json"
@@ -135,6 +90,8 @@ def process(station_id):
                 })
             except ValueError as e:
                 print(f"Error processing row {row}: {e}")
+
+    os.remove(input_filepath)
 
     with open(output_filepath, 'w', encoding='utf-8') as jsonfile:
         json.dump(rain_data, jsonfile, ensure_ascii=False, indent=2)
