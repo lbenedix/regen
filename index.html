@@ -24,13 +24,13 @@
             --border-color: #ddd;
             --input-bg: #fff;
             --input-text: #333;
+            --success-color: #28a745;
+            --error-color: #dc3545;
+            --container-max-width: 1000px;
         }
-
         html {
-            /* Prevent pull-to-refresh on mobile browsers */
             overscroll-behavior-y: contain;
         }
-
         [data-theme="dark"] {
             --bg-color: #1a1a1a;
             --text-color: #e0e0e0;
@@ -42,24 +42,19 @@
             --input-bg: #404040;
             --input-text: #e0e0e0;
         }
-
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
             background-color: var(--bg-color);
             color: var(--text-color);
             transition: background-color 0.3s ease, color 0.3s ease;
-            /* Prevent pull-to-refresh on mobile */
             overscroll-behavior-y: contain;
-            /* Prevent bounce scrolling on iOS */
             -webkit-overflow-scrolling: touch;
         }
-
         h1 {
             text-align: center;
             color: var(--text-color);
         }
-
         .theme-toggle {
             position: fixed;
             top: 20px;
@@ -76,12 +71,10 @@
             transition: background-color 0.3s ease, transform 0.2s ease;
             z-index: 1000;
         }
-
         .theme-toggle:hover {
             background: var(--button-hover);
             transform: scale(1.1);
         }
-
         .select-container {
             margin: 20px auto;
             text-align: center;
@@ -90,7 +83,6 @@
             align-items: center;
             gap: 10px;
         }
-
         .date-selectors {
             display: none;
             margin: 20px auto;
@@ -99,11 +91,6 @@
             align-items: center;
             gap: 10px;
         }
-
-        .date-selectors {
-            display: none; /* Hidden until a station is selected */
-        }
-
         select {
             padding: 10px;
             font-size: 16px;
@@ -114,7 +101,6 @@
             border: 1px solid var(--border-color);
             transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
-
         button {
             padding: 10px;
             font-size: 16px;
@@ -125,20 +111,17 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
-
         button:hover {
             background-color: var(--button-hover);
         }
-
         #stationSelect {
             width: 350px;
             min-width: 350px;
             background-color: var(--input-bg);
             color: var(--input-text);
         }
-
         .chart-container {
-            max-width: 1000px;
+            max-width: var(--container-max-width);
             width: 100%;
             height: 400px;
             margin: 20px auto;
@@ -150,24 +133,20 @@
             box-sizing: border-box;
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
-
         canvas {
             display: block;
             box-sizing: border-box;
         }
-
         .station-info {
-            max-width: 1000px;
+            max-width: var(--container-max-width);
             width: 100%;
             margin: 20px auto;
             display: none;
             gap: 20px;
         }
-
         .station-info.visible {
             display: flex;
         }
-
         .map-container {
             width: 300px;
             height: 200px;
@@ -177,7 +156,6 @@
             overflow: hidden;
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
-
         .station-details {
             flex: 1;
             background-color: var(--card-bg);
@@ -186,22 +164,77 @@
             padding: 20px;
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
-
         .station-details h3 {
             margin: 0 0 10px 0;
             color: var(--text-color);
         }
-
         .station-details p {
             margin: 5px 0;
             color: var(--text-color);
         }
-
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1001;
+        }
+        .toast {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 10px var(--card-shadow);
+            display: flex;
+            align-items: center;
+            min-width: 250px;
+            animation: slideIn 0.3s ease forwards;
+            opacity: 0;
+            transform: translateX(100%);
+        }
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        .toast.success {
+            border-left: 4px solid var(--success-color);
+        }
+        .toast.error {
+            border-left: 4px solid var(--error-color);
+        }
+        .toast-close {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 16px;
+            cursor: pointer;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .loading-spinner {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--button-bg);
+            animation: spin 1s ease-in-out infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
         @media (max-width: 768px) {
             .station-info {
                 flex-direction: column;
             }
-
             .map-container {
                 width: 100%;
                 height: 250px;
@@ -210,17 +243,15 @@
     </style>
 </head>
 <body>
-
 <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode">
     🌙
 </button>
-
+<h1>Monthly Precipitation Charts</h1>
 <div class="select-container">
     <select id="stationSelect" onchange="handleStationChange()">
         <option value="">Select Station</option>
     </select>
 </div>
-
 <div class="date-selectors" id="dateSelectors">
     <button onclick="changeMonth(-1)">&larr;</button>
     <select id="yearSelect" onchange="loadStationData()">
@@ -231,9 +262,8 @@
     </select>
     <button onclick="changeMonth(1)">&rarr;</button>
 </div>
-
+<div class="loading-spinner" id="loadingSpinner"></div>
 <div id="charts"></div>
-
 <div class="station-info" id="stationInfo">
     <div class="map-container">
         <div id="map" style="width: 100%; height: 100%;"></div>
@@ -246,47 +276,78 @@
         <p><strong>Coordinates:</strong> <span id="stationCoords">-</span></p>
     </div>
 </div>
+<div class="toast-container" id="toastContainer"></div>
 
 <script>
     // Check if Chart.js is loaded
     if (typeof Chart === 'undefined') {
-        alert('Chart.js failed to load. Please check your internet connection or the CDN link.');
+        showToast('Chart.js failed to load. Please check your internet connection or the CDN link.', 'error');
     }
-    moment.locale('de');
-
+    
+    // Constants
+    const APP_STATE = {
+        STATIONS: {},
+        STATION_FEATURES: {},
+        DATA_CACHE: {},
+        map: null,
+        currentMarker: null,
+        currentChart: null,
+        currentStationData: null,
+        mapInitialized: false
+    };
+    
+    // Initialize app
+    document.addEventListener('DOMContentLoaded', function() {
+        loadTheme();
+        initializeApp();
+    });
+    
+    // Initialize app components
+    function initializeApp() {
+        moment.locale('de');
+        preventPullToRefresh();
+        populateYearDropdown();
+        populateMonthDropdown();
+        loadStations();
+        
+        // Set default station after loading
+        setTimeout(() => {
+            const stationSelect = document.getElementById('stationSelect');
+            if (stationSelect.options.length > 1) {
+                stationSelect.value = "19897";
+                handleStationChange();
+            }
+        }, 500);
+    }
+    
     // Prevent pull-to-refresh on mobile devices
-    let startY = 0;
-    let isPreventingPullToRefresh = false;
-
-    document.addEventListener('touchstart', function (e) {
-        startY = e.touches[0].pageY;
-        isPreventingPullToRefresh = window.pageYOffset === 0;
-    }, {passive: false});
-
-    document.addEventListener('touchmove', function (e) {
-        const currentY = e.touches[0].pageY;
-        const isScrollingDown = currentY > startY;
-
-        if (isPreventingPullToRefresh && isScrollingDown) {
-            e.preventDefault();
-        }
-    }, {passive: false});
-
-    // Additional prevention using overscroll-behavior
-    document.body.style.overscrollBehavior = 'contain';
-    document.documentElement.style.overscrollBehavior = 'contain';
-
-    let STATIONS = {};
-    let STATION_FEATURES = {};
-    let map = null;
-    let currentMarker = null;
-
-    // Dark mode functionality
+    function preventPullToRefresh() {
+        let startY = 0;
+        let isPreventingPullToRefresh = false;
+        
+        document.addEventListener('touchstart', function (e) {
+            startY = e.touches[0].pageY;
+            isPreventingPullToRefresh = window.pageYOffset === 0;
+        }, {passive: false});
+        
+        document.addEventListener('touchmove', function (e) {
+            const currentY = e.touches[0].pageY;
+            const isScrollingDown = currentY > startY;
+            if (isPreventingPullToRefresh && isScrollingDown) {
+                e.preventDefault();
+            }
+        }, {passive: false});
+        
+        document.body.style.overscrollBehavior = 'contain';
+        document.documentElement.style.overscrollBehavior = 'contain';
+    }
+    
+    // Theme management
     function toggleTheme() {
         const html = document.documentElement;
         const toggleButton = document.querySelector('.theme-toggle');
         const currentTheme = html.getAttribute('data-theme');
-
+        
         if (currentTheme === 'dark') {
             html.removeAttribute('data-theme');
             toggleButton.textContent = '🌙';
@@ -296,19 +357,18 @@
             toggleButton.textContent = '☀️';
             localStorage.setItem('theme', 'dark');
         }
-
+        
         // Refresh chart if it exists to update colors
-        if (currentChart) {
+        if (APP_STATE.currentChart) {
             updateChartColors();
         }
     }
-
-    // Load saved theme preference
+    
     function loadTheme() {
         const savedTheme = localStorage.getItem('theme');
         const html = document.documentElement;
         const toggleButton = document.querySelector('.theme-toggle');
-
+        
         if (savedTheme === 'dark') {
             html.setAttribute('data-theme', 'dark');
             toggleButton.textContent = '☀️';
@@ -317,61 +377,42 @@
             toggleButton.textContent = '🌙';
         }
     }
-
-    // Update chart colors based on theme
-    function updateChartColors() {
-        if (!currentChart) return;
-
-        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        const textColor = isDark ? '#e0e0e0' : '#333';
-        const gridColor = isDark ? '#404040' : '#e0e0e0';
-
-        currentChart.options.scales.x.ticks.color = textColor;
-        currentChart.options.scales.x.title.color = textColor;
-        currentChart.options.scales.x.grid.color = gridColor;
-        currentChart.options.scales.y.ticks.color = textColor;
-        currentChart.options.scales.y.title.color = textColor;
-        currentChart.options.scales.y.grid.color = gridColor;
-        currentChart.options.plugins.title.color = textColor;
-        currentChart.options.plugins.legend.labels.color = textColor;
-
-        currentChart.update('none');
-    }
-
-    // Initialize theme on page load
-    document.addEventListener('DOMContentLoaded', loadTheme);
-
-    // Load stations from GeoJSON file
-    fetch('stations.geojson')
-        .then(response => response.json())
-        .then(geojsonData => {
-            // Extract stations that match our desired station IDs
-            const desiredStationIds = new Set([400, 403, 420, 426, 433, 17444, 17445, 17446, 17447, 17448, 17449, 17450,
-                17451, 17452, 17453, 17454, 17455, 17456, 17457, 17458, 17459, 17460, 17461,
-                17462, 17463, 17464, 17465, 17466, 17467, 17468, 17469, 17470, 17471, 17472,
-                17473, 17474, 17475, 17476, 17477, 17478, 17479, 17480, 17481, 17482, 17483,
-                17484, 17485, 17486, 17487, 17488, 17489, 17490, 17491, 19897, 19898]);
-
-            geojsonData.features.forEach(feature => {
-                const stationId = parseInt(feature.properties.station_id);
-                if (desiredStationIds.has(stationId)) {
-                    STATIONS[stationId] = feature.properties.station_name;
-                    STATION_FEATURES[stationId] = feature;
-                }
+    
+    // Station management
+    function loadStations() {
+        fetch('stations.geojson')
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to load stations data');
+                return response.json();
+            })
+            .then(geojsonData => {
+                const desiredStationIds = new Set([400, 403, 420, 426, 433, 17444, 17445, 17446, 17447, 17448, 17449, 17450,
+                    17451, 17452, 17453, 17454, 17455, 17456, 17457, 17458, 17459, 17460, 17461,
+                    17462, 17463, 17464, 17465, 17466, 17467, 17468, 17469, 17470, 17471, 17472,
+                    17473, 17474, 17475, 17476, 17477, 17478, 17479, 17480, 17481, 17482, 17483,
+                    17484, 17485, 17486, 17487, 17488, 17489, 17490, 17491, 19897, 19898]);
+                
+                geojsonData.features.forEach(feature => {
+                    const stationId = parseInt(feature.properties.station_id);
+                    if (desiredStationIds.has(stationId)) {
+                        APP_STATE.STATIONS[stationId] = feature.properties.station_name;
+                        APP_STATE.STATION_FEATURES[stationId] = feature;
+                    }
+                });
+                
+                populateStationDropdown();
+                showToast('Stations loaded successfully', 'success');
+            })
+            .catch(error => {
+                console.error('Error loading stations:', error);
+                showToast('Error loading station data', 'error');
             });
-
-            populateStationDropdown();
-            initializeMap();
-        })
-        .catch(error => {
-            console.error('Error loading stations:', error);
-            alert('Error loading station data');
-        });
-
+    }
+    
     function populateStationDropdown() {
-        // Populate station dropdown, sorted alphabetically by name
         const stationSelect = document.getElementById('stationSelect');
-        Object.entries(STATIONS)
+        
+        Object.entries(APP_STATE.STATIONS)
             .sort((a, b) => a[1].localeCompare(b[1]))
             .forEach(([id, name]) => {
                 const option = document.createElement('option');
@@ -379,87 +420,112 @@
                 option.textContent = name;
                 stationSelect.appendChild(option);
             });
-
-        // Set default station after loading
-        stationSelect.value = "19897";
-        handleStationChange();
     }
-
-    // Populate year dropdown (2020-2025)
-    const yearSelect = document.getElementById('yearSelect');
-    for (let year = 2020; year <= 2025; year++) {
-        const option = document.createElement('option');
-        option.value = year;
-        option.textContent = year;
-        yearSelect.appendChild(option);
+    
+    function populateYearDropdown() {
+        const yearSelect = document.getElementById('yearSelect');
+        for (let year = 2020; year <= 2025; year++) {
+            const option = document.createElement('option');
+            option.value = year;
+            option.textContent = year;
+            yearSelect.appendChild(option);
+        }
     }
-
-    // Populate month dropdown
-    const monthSelect = document.getElementById('monthSelect');
-    const months = moment.months();
-    months.forEach((month, index) => {
-        const option = document.createElement('option');
-        option.value = index + 1; // 1-12 for January-December
-        option.textContent = month;
-        monthSelect.appendChild(option);
-    });
-
+    
+    function populateMonthDropdown() {
+        const monthSelect = document.getElementById('monthSelect');
+        const months = moment.months();
+        
+        months.forEach((month, index) => {
+            const option = document.createElement('option');
+            option.value = index + 1; // 1-12 for January-December
+            option.textContent = month;
+            monthSelect.appendChild(option);
+        });
+    }
+    
+    // Map management
     function initializeMap() {
+        // Only initialize the map once
+        if (APP_STATE.mapInitialized) {
+            return;
+        }
+        
+        // Check if the map container is available
+        const mapContainer = document.getElementById('map');
+        if (!mapContainer) {
+            console.error('Map container not found');
+            return;
+        }
+        
         // Initialize map centered on Germany without zoom controls
-        map = L.map('map', {
+        APP_STATE.map = L.map('map', {
             zoomControl: false
-        }).setView([51.1657, 10.4515], 14);
-
+        }).setView([51.1657, 10.4515], 6);
+        
         // Add OpenStreetMap tiles
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
+        }).addTo(APP_STATE.map);
+        
+        APP_STATE.mapInitialized = true;
+        
+        // Force a resize after a short delay to ensure proper rendering
+        setTimeout(() => {
+            if (APP_STATE.map) {
+                APP_STATE.map.invalidateSize();
+            }
+        }, 100);
     }
-
+    
     function updateStationInfo(stationId) {
-        const feature = STATION_FEATURES[stationId];
+        const feature = APP_STATE.STATION_FEATURES[stationId];
         if (!feature) return;
-
+        
         const props = feature.properties;
         const coords = feature.geometry.coordinates;
-
+        
         // Update station details
         document.getElementById('stationName').textContent = props.station_name;
         document.getElementById('stationId').textContent = props.station_id;
         document.getElementById('stationElevation').textContent = props.elevation || 'N/A';
         document.getElementById('stationState').textContent = props.federal_state || 'N/A';
         document.getElementById('stationCoords').textContent = `${coords[1].toFixed(4)}, ${coords[0].toFixed(4)}`;
-
+        
+        // Initialize map if not already done
+        initializeMap();
+        
         // Update map
-        if (map) {
+        if (APP_STATE.map) {
             // Remove previous marker
-            if (currentMarker) {
-                map.removeLayer(currentMarker);
+            if (APP_STATE.currentMarker) {
+                APP_STATE.map.removeLayer(APP_STATE.currentMarker);
             }
-
+            
             // Add new marker
-            currentMarker = L.marker([coords[1], coords[0]])
-                .addTo(map)
+            APP_STATE.currentMarker = L.marker([coords[1], coords[0]])
+                .addTo(APP_STATE.map)
                 .bindPopup(`<b>${props.station_name}</b><br>ID: ${props.station_id}<br>Elevation: ${props.elevation}m`);
-
+            
             // Center map on station
-            map.setView([coords[1], coords[0]], 13);
+            APP_STATE.map.setView([coords[1], coords[0]], 13);
         }
-
+        
         // Show station info section
         document.getElementById('stationInfo').classList.add('visible');
     }
-
+    
+    // Data management
     function handleStationChange() {
-        const stationId = stationSelect.value;
+        const stationId = document.getElementById('stationSelect').value;
         const dateSelectors = document.getElementById('dateSelectors');
         const stationInfo = document.getElementById('stationInfo');
-
+        
         if (stationId) {
-            // Set current year and month
             const now = moment();
-            yearSelect.value = now.year();
-            monthSelect.value = now.month() + 1; // moment months are 0-11, select uses 1-12
+            document.getElementById('yearSelect').value = now.year();
+            document.getElementById('monthSelect').value = now.month() + 1;
+            
             dateSelectors.style.display = 'flex';
             updateStationInfo(stationId);
             loadStationData(stationId);
@@ -469,28 +535,42 @@
             document.getElementById('charts').innerHTML = '';
         }
     }
-
+    
     function changeMonth(direction) {
-        const year = parseInt(yearSelect.value);
-        const month = parseInt(monthSelect.value);
+        const year = parseInt(document.getElementById('yearSelect').value);
+        const month = parseInt(document.getElementById('monthSelect').value);
+        
         if (!year || !month) return;
-
+        
         let newDate = moment(`${year}-${month}-01`, 'YYYY-M-DD').add(direction, 'month');
-        yearSelect.value = newDate.year();
-        monthSelect.value = newDate.month() + 1; // moment months are 0-11, dropdown uses 1-12
-        loadStationData(stationSelect.value);
+        document.getElementById('yearSelect').value = newDate.year();
+        document.getElementById('monthSelect').value = newDate.month() + 1;
+        
+        loadStationData(document.getElementById('stationSelect').value);
     }
-
+    
     function loadStationData(stationId) {
-        const year = yearSelect.value;
-        const month = monthSelect.value;
-
+        const year = document.getElementById('yearSelect').value;
+        const month = document.getElementById('monthSelect').value;
+        
         if (!stationId || !year || !month) {
             document.getElementById('charts').innerHTML = '';
             return;
         }
-
+        
+        // Show loading spinner
+        document.getElementById('loadingSpinner').style.display = 'block';
+        
         const fileName = `data/rain_data_${stationId.padStart(5, '0')}.json`;
+        const cacheKey = `${stationId}-${year}-${month}`;
+        
+        // Check if data is already cached
+        if (APP_STATE.DATA_CACHE[cacheKey]) {
+            processStationData(APP_STATE.DATA_CACHE[cacheKey], APP_STATE.STATIONS[stationId], year, month);
+            document.getElementById('loadingSpinner').style.display = 'none';
+            return;
+        }
+        
         fetch(fileName)
             .then(response => {
                 if (!response.ok) {
@@ -498,25 +578,32 @@
                 }
                 return response.json();
             })
-            .then(data => processData(data, STATIONS[stationId], year, month))
+            .then(data => {
+                // Cache the data
+                APP_STATE.DATA_CACHE[cacheKey] = data;
+                processStationData(data, APP_STATE.STATIONS[stationId], year, month);
+                document.getElementById('loadingSpinner').style.display = 'none';
+            })
             .catch(error => {
-                alert('Error loading data: ' + error.message);
+                console.error('Error loading data:', error);
+                showToast(`Error loading data: ${error.message}`, 'error');
+                document.getElementById('loadingSpinner').style.display = 'none';
                 document.getElementById('charts').innerHTML = '';
             });
     }
-
-    function processData(data, stationName, year, month) {
+    
+    function processStationData(data, stationName, year, month) {
         if (!window.Chart) {
-            alert('Chart.js is not available. Cannot render charts.');
+            showToast('Chart.js is not available. Cannot render charts.', 'error');
             return;
         }
-
+        
         // Destroy previous chart instance if it exists
-        if (currentChart) {
-            currentChart.destroy();
-            currentChart = null;
+        if (APP_STATE.currentChart) {
+            APP_STATE.currentChart.destroy();
+            APP_STATE.currentChart = null;
         }
-
+        
         // Filter data for the selected year and month
         const monthYear = `${year}-${month.padStart(2, '0')}`;
         const monthData = data
@@ -526,29 +613,37 @@
                 precipitation: entry.precipitation
             }))
             .sort((a, b) => a.date - b.date);
-
+        
+        // Store current station data
+        APP_STATE.currentStationData = {
+            stationName,
+            year,
+            month,
+            data: monthData
+        };
+        
         // Clear previous charts
         const chartsContainer = document.getElementById('charts');
         chartsContainer.innerHTML = '';
-
+        
         if (monthData.length === 0) {
             chartsContainer.innerHTML = '<p>No data available for this month.</p>';
             return;
         }
-
+        
         // Create a single bar chart for the selected month
         const container = document.createElement('div');
         container.className = 'chart-container';
         const canvas = document.createElement('canvas');
         container.appendChild(canvas);
         chartsContainer.appendChild(container);
-
+        
         // Get theme colors
         const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
         const textColor = isDark ? '#e0e0e0' : '#333';
         const gridColor = isDark ? '#404040' : '#e0e0e0';
-
-        currentChart = new Chart(canvas, {
+        
+        APP_STATE.currentChart = new Chart(canvas, {
             type: 'bar',
             data: {
                 datasets: [{
@@ -574,7 +669,7 @@
                         time: {
                             unit: 'day',
                             displayFormats: {
-                                day: 'ddd MMM D' // Shows weekday, month, day
+                                day: 'ddd MMM D'
                             }
                         },
                         title: {
@@ -601,7 +696,7 @@
                         },
                         beginAtZero: true,
                         min: 0,
-                        max: 60, // Set your desired max value
+                        max: 60,
                         ticks: {
                             color: textColor
                         },
@@ -624,58 +719,73 @@
                 }
             }
         });
-
+        
         // Force initial resize after a short delay
         setTimeout(() => {
-            if (currentChart) {
-                currentChart.resize();
+            if (APP_STATE.currentChart) {
+                APP_STATE.currentChart.resize();
             }
         }, 100);
     }
-
+    
+    // Chart management
+    function updateChartColors() {
+        if (!APP_STATE.currentChart) return;
+        
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        const textColor = isDark ? '#e0e0e0' : '#333';
+        const gridColor = isDark ? '#404040' : '#e0e0e0';
+        
+        APP_STATE.currentChart.options.scales.x.ticks.color = textColor;
+        APP_STATE.currentChart.options.scales.x.title.color = textColor;
+        APP_STATE.currentChart.options.scales.x.grid.color = gridColor;
+        APP_STATE.currentChart.options.scales.y.ticks.color = textColor;
+        APP_STATE.currentChart.options.scales.y.title.color = textColor;
+        APP_STATE.currentChart.options.scales.y.grid.color = gridColor;
+        APP_STATE.currentChart.options.plugins.title.color = textColor;
+        APP_STATE.currentChart.options.plugins.legend.labels.color = textColor;
+        
+        APP_STATE.currentChart.update('none');
+    }
+    
+    // Navigation functionality
     function changeStation(direction) {
         const stationSelect = document.getElementById('stationSelect');
         const currentStationId = stationSelect.value;
+        
         if (!currentStationId) return;
-
-        // Get all station options (excluding the first empty option)
+        
         const options = Array.from(stationSelect.options).slice(1);
         const currentIndex = options.findIndex(option => option.value === currentStationId);
-
+        
         if (currentIndex === -1) return;
-
-        // Calculate new index with wrapping
+        
         let newIndex = currentIndex + direction;
         if (newIndex < 0) {
-            newIndex = options.length - 1; // Wrap to last station
+            newIndex = options.length - 1;
         } else if (newIndex >= options.length) {
-            newIndex = 0; // Wrap to first station
+            newIndex = 0;
         }
-
-        // Store current year and month before changing station
+        
         const currentYear = document.getElementById('yearSelect').value;
         const currentMonth = document.getElementById('monthSelect').value;
-
-        // Change to new station
+        
         stationSelect.value = options[newIndex].value;
-
-        // Update station info
         updateStationInfo(options[newIndex].value);
-
-        // Restore year and month, then load data
+        
         if (currentYear && currentMonth) {
             document.getElementById('yearSelect').value = currentYear;
             document.getElementById('monthSelect').value = currentMonth;
         }
-
+        
         loadStationData(stationSelect.value);
     }
-
+    
+    // Keyboard navigation
     document.addEventListener('keydown', function (e) {
-        // Only trigger if date selectors are visible
         const dateSelectors = document.getElementById('dateSelectors');
         if (dateSelectors.style.display !== 'flex') return;
-
+        
         if (e.key === 'ArrowLeft') {
             changeMonth(-1);
             e.preventDefault();
@@ -683,80 +793,94 @@
             changeMonth(1);
             e.preventDefault();
         } else if (e.key === 'ArrowUp') {
-            changeStation(-1); // Previous station
+            changeStation(-1);
             e.preventDefault();
         } else if (e.key === 'ArrowDown') {
-            changeStation(1); // Next station
+            changeStation(1);
             e.preventDefault();
         }
     });
-
-    let currentChart = null;
+    
+    // Touch navigation
     let touchStartX = null;
     let touchStartY = null;
-    let resizeTimeout = null;
-
-    // Debounced resize function
-    function debounceResize() {
-        if (resizeTimeout) {
-            clearTimeout(resizeTimeout);
-        }
-        resizeTimeout = setTimeout(() => {
-            if (currentChart) {
-                currentChart.resize();
-            }
-        }, 150);
-    }
-
-    // Handle window resize to make chart responsive
-    window.addEventListener('resize', debounceResize);
-
+    
     document.addEventListener('touchstart', function (e) {
         if (e.touches.length === 1) {
             touchStartX = e.touches[0].clientX;
             touchStartY = e.touches[0].clientY;
         }
     });
-
+    
     document.addEventListener('touchend', function (e) {
         if (touchStartX === null || touchStartY === null) return;
+        
         const touchEndX = e.changedTouches[0].clientX;
         const touchEndY = e.changedTouches[0].clientY;
         const dx = touchEndX - touchStartX;
         const dy = touchEndY - touchStartY;
-
-        // Only trigger if date selectors are visible
+        
         const dateSelectors = document.getElementById('dateSelectors');
         if (dateSelectors.style.display !== 'flex') return;
-
-        // Check for horizontal swipe (change months)
+        
         if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
             if (dx < 0) {
-                changeMonth(1); // Swipe left: next month
+                changeMonth(1);
             } else {
-                changeMonth(-1); // Swipe right: previous month
+                changeMonth(-1);
             }
-        }
-        // Check for vertical swipe (change stations)
-        else if (Math.abs(dy) > 50 && Math.abs(dy) > Math.abs(dx)) {
+        } else if (Math.abs(dy) > 50 && Math.abs(dy) > Math.abs(dx)) {
             if (dy < 0) {
-                changeStation(-1); // Swipe up: previous station
+                changeStation(-1);
             } else {
-                changeStation(1); // Swipe down: next station
+                changeStation(1);
             }
         }
+        
         touchStartX = null;
         touchStartY = null;
     });
-
-
-    // Set default station after loading, 1 second after page load
-    document.addEventListener('DOMContentLoaded', function () {
-        setTimeout(function () {
-            console.log("Setting default station to 19897");
-            updateStationInfo(stationSelect.value);
-        }, 200);
-    });
+    
+    // Toast notification system
+    function showToast(message, type = 'success') {
+        const toastContainer = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        
+        toast.innerHTML = `
+            <span>${message}</span>
+            <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+        `;
+        
+        toastContainer.appendChild(toast);
+        
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            if (toast.parentElement) {
+                toast.remove();
+            }
+        }, 5000);
+    }
+    
+    // Window resize handling
+    let resizeTimeout = null;
+    
+    function debounceResize() {
+        if (resizeTimeout) {
+            clearTimeout(resizeTimeout);
+        }
+        
+        resizeTimeout = setTimeout(() => {
+            if (APP_STATE.currentChart) {
+                APP_STATE.currentChart.resize();
+            }
+            if (APP_STATE.map) {
+                APP_STATE.map.invalidateSize();
+            }
+        }, 150);
+    }
+    
+    window.addEventListener('resize', debounceResize);
 </script>
 </body>
 </html>
