@@ -84,6 +84,8 @@ def process(station_id):
             try:
                 date = datetime.strptime(row['MESS_DATUM'], '%Y%m%d').date()
                 precipitation = float(row['RS'].strip())
+                if precipitation == -999.0:
+                    precipitation = 0
                 rain_data.append({
                     'date': date.isoformat(),
                     'precipitation': precipitation

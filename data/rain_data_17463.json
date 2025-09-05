@@ -1,9 +1,5 @@
 [
   {
-    "date": "2024-03-03",
-    "precipitation": 0.0
-  },
-  {
     "date": "2024-03-04",
     "precipitation": 0.0
   },
@@ -1237,7 +1233,7 @@
   },
   {
     "date": "2025-01-09",
-    "precipitation": -999.0
+    "precipitation": 0
   },
   {
     "date": "2025-01-10",

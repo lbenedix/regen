@@ -139,6 +139,49 @@
             display: block;
             box-sizing: border-box;
         }
+        .stats-container {
+            max-width: var(--container-max-width);
+            width: 100%;
+            margin: 20px auto;
+            display: none;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px var(--card-shadow);
+            padding: 20px;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .stats-container.visible {
+            display: block;
+        }
+        .stats-container h2 {
+            margin: 0 0 15px 0;
+            color: var(--text-color);
+            font-size: 20px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .stat-item {
+            background-color: var(--bg-color);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--stat-highlight-color);
+            margin-top: 5px;
+        }
         .station-info {
             max-width: var(--container-max-width);
             width: 100%;
@@ -165,8 +208,6 @@
             box-shadow: 0 2px 4px var(--card-shadow);
             padding: 20px;
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
-            display: flex;
-            flex-direction: column;
         }
         .station-details h3 {
             margin: 0 0 10px 0;
@@ -175,31 +216,6 @@
         .station-details p {
             margin: 5px 0;
             color: var(--text-color);
-        }
-        .station-stats {
-            margin-top: auto;
-            padding-top: 15px;
-            border-top: 1px solid var(--border-color);
-        }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-top: 10px;
-        }
-        .stat-item {
-            text-align: center;
-        }
-        .stat-label {
-            font-size: 14px;
-            color: var(--text-color);
-            opacity: 0.8;
-        }
-        .stat-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--stat-highlight-color);
-            margin-top: 5px;
         }
         .toast-container {
             position: fixed;
@@ -270,6 +286,7 @@
             }
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
             }
         }
     </style>
@@ -296,6 +313,23 @@
 </div>
 <div class="loading-spinner" id="loadingSpinner"></div>
 <div id="charts"></div>
+<div class="stats-container" id="statsContainer">
+    <h2>Monthly Statistics</h2>
+    <div class="stats-grid">
+        <div class="stat-item">
+            <div class="stat-label">Total Precipitation</div>
+            <div class="stat-value" id="totalPrecipitation">-</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label">Rainy Days</div>
+            <div class="stat-value" id="rainyDays">-</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label">Daily Average</div>
+            <div class="stat-value" id="dailyAverage">-</div>
+        </div>
+    </div>
+</div>
 <div class="station-info" id="stationInfo">
     <div class="map-container">
         <div id="map" style="width: 100%; height: 100%;"></div>
@@ -306,22 +340,6 @@
         <p><strong>Elevation:</strong> <span id="stationElevation">-</span> m</p>
         <p><strong>Federal State:</strong> <span id="stationState">-</span></p>
         <p><strong>Coordinates:</strong> <span id="stationCoords">-</span></p>
-        <div class="station-stats">
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-label">Total Precipitation</div>
-                    <div class="stat-value" id="totalPrecipitation">-</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-label">Rainy Days</div>
-                    <div class="stat-value" id="rainyDays">-</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-label">Daily Average</div>
-                    <div class="stat-value" id="dailyAverage">-</div>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 <div class="toast-container" id="toastContainer"></div>
@@ -331,7 +349,7 @@
     if (typeof Chart === 'undefined') {
         showToast('Chart.js failed to load. Please check your internet connection or the CDN link.', 'error');
     }
-    
+
     // Constants
     const APP_STATE = {
         STATIONS: {},
@@ -343,13 +361,13 @@
         currentStationData: null,
         mapInitialized: false
     };
-    
+
     // Initialize app
     document.addEventListener('DOMContentLoaded', function() {
         loadTheme();
         initializeApp();
     });
-    
+
     // Initialize app components
     function initializeApp() {
         moment.locale('de');
@@ -357,7 +375,7 @@
         populateYearDropdown();
         populateMonthDropdown();
         loadStations();
-        
+
         // Set default station after loading
         setTimeout(() => {
             const stationSelect = document.getElementById('stationSelect');
@@ -367,17 +385,17 @@
             }
         }, 500);
     }
-    
+
     // Prevent pull-to-refresh on mobile devices
     function preventPullToRefresh() {
         let startY = 0;
         let isPreventingPullToRefresh = false;
-        
+
         document.addEventListener('touchstart', function (e) {
             startY = e.touches[0].pageY;
             isPreventingPullToRefresh = window.pageYOffset === 0;
         }, {passive: false});
-        
+
         document.addEventListener('touchmove', function (e) {
             const currentY = e.touches[0].pageY;
             const isScrollingDown = currentY > startY;
@@ -385,17 +403,17 @@
                 e.preventDefault();
             }
         }, {passive: false});
-        
+
         document.body.style.overscrollBehavior = 'contain';
         document.documentElement.style.overscrollBehavior = 'contain';
     }
-    
+
     // Theme management
     function toggleTheme() {
         const html = document.documentElement;
         const toggleButton = document.querySelector('.theme-toggle');
         const currentTheme = html.getAttribute('data-theme');
-        
+
         if (currentTheme === 'dark') {
             html.removeAttribute('data-theme');
             toggleButton.textContent = '🌙';
@@ -405,18 +423,18 @@
             toggleButton.textContent = '☀️';
             localStorage.setItem('theme', 'dark');
         }
-        
+
         // Refresh chart if it exists to update colors
         if (APP_STATE.currentChart) {
             updateChartColors();
         }
     }
-    
+
     function loadTheme() {
         const savedTheme = localStorage.getItem('theme');
         const html = document.documentElement;
         const toggleButton = document.querySelector('.theme-toggle');
-        
+
         if (savedTheme === 'dark') {
             html.setAttribute('data-theme', 'dark');
             toggleButton.textContent = '☀️';
@@ -425,7 +443,7 @@
             toggleButton.textContent = '🌙';
         }
     }
-    
+
     // Station management
     function loadStations() {
         fetch('stations.geojson')
@@ -439,7 +457,7 @@
                     17462, 17463, 17464, 17465, 17466, 17467, 17468, 17469, 17470, 17471, 17472,
                     17473, 17474, 17475, 17476, 17477, 17478, 17479, 17480, 17481, 17482, 17483,
                     17484, 17485, 17486, 17487, 17488, 17489, 17490, 17491, 19897, 19898]);
-                
+
                 geojsonData.features.forEach(feature => {
                     const stationId = parseInt(feature.properties.station_id);
                     if (desiredStationIds.has(stationId)) {
@@ -447,7 +465,7 @@
                         APP_STATE.STATION_FEATURES[stationId] = feature;
                     }
                 });
-                
+
                 populateStationDropdown();
                 showToast('Stations loaded successfully', 'success');
             })
@@ -456,10 +474,10 @@
                 showToast('Error loading station data', 'error');
             });
     }
-    
+
     function populateStationDropdown() {
         const stationSelect = document.getElementById('stationSelect');
-        
+
         Object.entries(APP_STATE.STATIONS)
             .sort((a, b) => a[1].localeCompare(b[1]))
             .forEach(([id, name]) => {
@@ -469,7 +487,7 @@
                 stationSelect.appendChild(option);
             });
     }
-    
+
     function populateYearDropdown() {
         const yearSelect = document.getElementById('yearSelect');
         for (let year = 2020; year <= 2025; year++) {
@@ -479,11 +497,11 @@
             yearSelect.appendChild(option);
         }
     }
-    
+
     function populateMonthDropdown() {
         const monthSelect = document.getElementById('monthSelect');
         const months = moment.months();
-        
+
         months.forEach((month, index) => {
             const option = document.createElement('option');
             option.value = index + 1; // 1-12 for January-December
@@ -491,33 +509,33 @@
             monthSelect.appendChild(option);
         });
     }
-    
+
     // Map management
     function initializeMap() {
         // Only initialize the map once
         if (APP_STATE.mapInitialized) {
             return;
         }
-        
+
         // Check if the map container is available
         const mapContainer = document.getElementById('map');
         if (!mapContainer) {
             console.error('Map container not found');
             return;
         }
-        
+
         // Initialize map centered on Germany without zoom controls
         APP_STATE.map = L.map('map', {
             zoomControl: false
         }).setView([51.1657, 10.4515], 6);
-        
+
         // Add OpenStreetMap tiles
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(APP_STATE.map);
-        
+
         APP_STATE.mapInitialized = true;
-        
+
         // Force a resize after a short delay to ensure proper rendering
         setTimeout(() => {
             if (APP_STATE.map) {
@@ -525,55 +543,55 @@
             }
         }, 100);
     }
-    
+
     function updateStationInfo(stationId) {
         const feature = APP_STATE.STATION_FEATURES[stationId];
         if (!feature) return;
-        
+
         const props = feature.properties;
         const coords = feature.geometry.coordinates;
-        
+
         // Update station details
         document.getElementById('stationName').textContent = props.station_name;
         document.getElementById('stationId').textContent = props.station_id;
         document.getElementById('stationElevation').textContent = props.elevation || 'N/A';
         document.getElementById('stationState').textContent = props.federal_state || 'N/A';
         document.getElementById('stationCoords').textContent = `${coords[1].toFixed(4)}, ${coords[0].toFixed(4)}`;
-        
+
         // Initialize map if not already done
         initializeMap();
-        
+
         // Update map
         if (APP_STATE.map) {
             // Remove previous marker
             if (APP_STATE.currentMarker) {
                 APP_STATE.map.removeLayer(APP_STATE.currentMarker);
             }
-            
+
             // Add new marker
             APP_STATE.currentMarker = L.marker([coords[1], coords[0]])
                 .addTo(APP_STATE.map)
                 .bindPopup(`<b>${props.station_name}</b><br>ID: ${props.station_id}<br>Elevation: ${props.elevation}m`);
-            
+
             // Center map on station
             APP_STATE.map.setView([coords[1], coords[0]], 13);
         }
-        
+
         // Show station info section
         document.getElementById('stationInfo').classList.add('visible');
     }
-    
+
     // Data management
     function handleStationChange() {
         const stationId = document.getElementById('stationSelect').value;
         const dateSelectors = document.getElementById('dateSelectors');
         const stationInfo = document.getElementById('stationInfo');
-        
+
         if (stationId) {
             const now = moment();
             document.getElementById('yearSelect').value = now.year();
             document.getElementById('monthSelect').value = now.month() + 1;
-            
+
             dateSelectors.style.display = 'flex';
             updateStationInfo(stationId);
             loadStationData(stationId);
@@ -581,53 +599,46 @@
             dateSelectors.style.display = 'none';
             stationInfo.classList.remove('visible');
             document.getElementById('charts').innerHTML = '';
-            // Reset statistics
-            resetStatistics();
+            document.getElementById('statsContainer').classList.remove('visible');
         }
     }
-    
-    function resetStatistics() {
-        document.getElementById('totalPrecipitation').textContent = '-';
-        document.getElementById('rainyDays').textContent = '-';
-        document.getElementById('dailyAverage').textContent = '-';
-    }
-    
+
     function changeMonth(direction) {
         const year = parseInt(document.getElementById('yearSelect').value);
         const month = parseInt(document.getElementById('monthSelect').value);
-        
+
         if (!year || !month) return;
-        
+
         let newDate = moment(`${year}-${month}-01`, 'YYYY-M-DD').add(direction, 'month');
         document.getElementById('yearSelect').value = newDate.year();
         document.getElementById('monthSelect').value = newDate.month() + 1;
-        
+
         loadStationData(document.getElementById('stationSelect').value);
     }
-    
+
     function loadStationData(stationId) {
         const year = document.getElementById('yearSelect').value;
         const month = document.getElementById('monthSelect').value;
-        
+
         if (!stationId || !year || !month) {
             document.getElementById('charts').innerHTML = '';
-            resetStatistics();
+            document.getElementById('statsContainer').classList.remove('visible');
             return;
         }
-        
+
         // Show loading spinner
         document.getElementById('loadingSpinner').style.display = 'block';
-        
+
         const fileName = `data/rain_data_${stationId.padStart(5, '0')}.json`;
         const cacheKey = `${stationId}-${year}-${month}`;
-        
+
         // Check if data is already cached
         if (APP_STATE.DATA_CACHE[cacheKey]) {
             processStationData(APP_STATE.DATA_CACHE[cacheKey], APP_STATE.STATIONS[stationId], year, month);
             document.getElementById('loadingSpinner').style.display = 'none';
             return;
         }
-        
+
         fetch(fileName)
             .then(response => {
                 if (!response.ok) {
@@ -646,22 +657,22 @@
                 showToast(`Error loading data: ${error.message}`, 'error');
                 document.getElementById('loadingSpinner').style.display = 'none';
                 document.getElementById('charts').innerHTML = '';
-                resetStatistics();
+                document.getElementById('statsContainer').classList.remove('visible');
             });
     }
-    
+
     function processStationData(data, stationName, year, month) {
         if (!window.Chart) {
             showToast('Chart.js is not available. Cannot render charts.', 'error');
             return;
         }
-        
+
         // Destroy previous chart instance if it exists
         if (APP_STATE.currentChart) {
             APP_STATE.currentChart.destroy();
             APP_STATE.currentChart = null;
         }
-        
+
         // Filter data for the selected year and month
         const monthYear = `${year}-${month.padStart(2, '0')}`;
         const monthData = data
@@ -671,7 +682,7 @@
                 precipitation: entry.precipitation
             }))
             .sort((a, b) => a.date - b.date);
-        
+
         // Store current station data
         APP_STATE.currentStationData = {
             stationName,
@@ -679,27 +690,30 @@
             month,
             data: monthData
         };
-        
+
         // Clear previous charts
         const chartsContainer = document.getElementById('charts');
         chartsContainer.innerHTML = '';
-        
+
         if (monthData.length === 0) {
             chartsContainer.innerHTML = '<p>No data available for this month.</p>';
-            resetStatistics();
+            document.getElementById('statsContainer').classList.remove('visible');
             return;
         }
-        
+
         // Calculate statistics
         const precipitationValues = monthData.map(d => d.precipitation);
         const totalPrecipitation = precipitationValues.reduce((sum, val) => sum + val, 0);
         const rainyDays = precipitationValues.filter(val => val > 0).length;
         const dailyAverage = totalPrecipitation / precipitationValues.length;
-        
+
         // Update statistics display
         document.getElementById('totalPrecipitation').textContent = `${totalPrecipitation.toFixed(1)} mm`;
         document.getElementById('rainyDays').textContent = rainyDays;
         document.getElementById('dailyAverage').textContent = `${dailyAverage.toFixed(1)} mm`;
+
+        // Show statistics container
+        document.getElementById('statsContainer').classList.add('visible');
         
         // Create a single bar chart for the selected month
         const container = document.createElement('div');
