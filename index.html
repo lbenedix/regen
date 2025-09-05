@@ -201,7 +201,7 @@
             .station-info {
                 flex-direction: column;
             }
-            
+
             .map-container {
                 width: 100%;
                 height: 250px;
@@ -258,19 +258,19 @@
     let startY = 0;
     let isPreventingPullToRefresh = false;
 
-    document.addEventListener('touchstart', function(e) {
+    document.addEventListener('touchstart', function (e) {
         startY = e.touches[0].pageY;
         isPreventingPullToRefresh = window.pageYOffset === 0;
-    }, { passive: false });
+    }, {passive: false});
 
-    document.addEventListener('touchmove', function(e) {
+    document.addEventListener('touchmove', function (e) {
         const currentY = e.touches[0].pageY;
         const isScrollingDown = currentY > startY;
-        
+
         if (isPreventingPullToRefresh && isScrollingDown) {
             e.preventDefault();
         }
-    }, { passive: false });
+    }, {passive: false});
 
     // Additional prevention using overscroll-behavior
     document.body.style.overscrollBehavior = 'contain';
@@ -286,7 +286,7 @@
         const html = document.documentElement;
         const toggleButton = document.querySelector('.theme-toggle');
         const currentTheme = html.getAttribute('data-theme');
-        
+
         if (currentTheme === 'dark') {
             html.removeAttribute('data-theme');
             toggleButton.textContent = '🌙';
@@ -296,7 +296,7 @@
             toggleButton.textContent = '☀️';
             localStorage.setItem('theme', 'dark');
         }
-        
+
         // Refresh chart if it exists to update colors
         if (currentChart) {
             updateChartColors();
@@ -308,7 +308,7 @@
         const savedTheme = localStorage.getItem('theme');
         const html = document.documentElement;
         const toggleButton = document.querySelector('.theme-toggle');
-        
+
         if (savedTheme === 'dark') {
             html.setAttribute('data-theme', 'dark');
             toggleButton.textContent = '☀️';
@@ -321,11 +321,11 @@
     // Update chart colors based on theme
     function updateChartColors() {
         if (!currentChart) return;
-        
+
         const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
         const textColor = isDark ? '#e0e0e0' : '#333';
         const gridColor = isDark ? '#404040' : '#e0e0e0';
-        
+
         currentChart.options.scales.x.ticks.color = textColor;
         currentChart.options.scales.x.title.color = textColor;
         currentChart.options.scales.x.grid.color = gridColor;
@@ -334,7 +334,7 @@
         currentChart.options.scales.y.grid.color = gridColor;
         currentChart.options.plugins.title.color = textColor;
         currentChart.options.plugins.legend.labels.color = textColor;
-        
+
         currentChart.update('none');
     }
 
@@ -346,12 +346,12 @@
         .then(response => response.json())
         .then(geojsonData => {
             // Extract stations that match our desired station IDs
-            const desiredStationIds = new Set([400, 403, 420, 426, 433, 17444, 17445, 17446, 17447, 17448, 17449, 17450, 
-                                              17451, 17452, 17453, 17454, 17455, 17456, 17457, 17458, 17459, 17460, 17461, 
-                                              17462, 17463, 17464, 17465, 17466, 17467, 17468, 17469, 17470, 17471, 17472, 
-                                              17473, 17474, 17475, 17476, 17477, 17478, 17479, 17480, 17481, 17482, 17483, 
-                                              17484, 17485, 17486, 17487, 17488, 17489, 17490, 17491, 19897, 19898]);
-            
+            const desiredStationIds = new Set([400, 403, 420, 426, 433, 17444, 17445, 17446, 17447, 17448, 17449, 17450,
+                17451, 17452, 17453, 17454, 17455, 17456, 17457, 17458, 17459, 17460, 17461,
+                17462, 17463, 17464, 17465, 17466, 17467, 17468, 17469, 17470, 17471, 17472,
+                17473, 17474, 17475, 17476, 17477, 17478, 17479, 17480, 17481, 17482, 17483,
+                17484, 17485, 17486, 17487, 17488, 17489, 17490, 17491, 19897, 19898]);
+
             geojsonData.features.forEach(feature => {
                 const stationId = parseInt(feature.properties.station_id);
                 if (desiredStationIds.has(stationId)) {
@@ -359,7 +359,7 @@
                     STATION_FEATURES[stationId] = feature;
                 }
             });
-            
+
             populateStationDropdown();
             initializeMap();
         })
@@ -379,7 +379,7 @@
                 option.textContent = name;
                 stationSelect.appendChild(option);
             });
-        
+
         // Set default station after loading
         stationSelect.value = "19897";
         handleStationChange();
@@ -408,8 +408,8 @@
         // Initialize map centered on Germany without zoom controls
         map = L.map('map', {
             zoomControl: false
-        }).setView([51.1657, 10.4515], 6);
-        
+        }).setView([51.1657, 10.4515], 14);
+
         // Add OpenStreetMap tiles
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
@@ -419,33 +419,33 @@
     function updateStationInfo(stationId) {
         const feature = STATION_FEATURES[stationId];
         if (!feature) return;
-        
+
         const props = feature.properties;
         const coords = feature.geometry.coordinates;
-        
+
         // Update station details
         document.getElementById('stationName').textContent = props.station_name;
         document.getElementById('stationId').textContent = props.station_id;
         document.getElementById('stationElevation').textContent = props.elevation || 'N/A';
         document.getElementById('stationState').textContent = props.federal_state || 'N/A';
         document.getElementById('stationCoords').textContent = `${coords[1].toFixed(4)}, ${coords[0].toFixed(4)}`;
-        
+
         // Update map
         if (map) {
             // Remove previous marker
             if (currentMarker) {
                 map.removeLayer(currentMarker);
             }
-            
+
             // Add new marker
             currentMarker = L.marker([coords[1], coords[0]])
                 .addTo(map)
                 .bindPopup(`<b>${props.station_name}</b><br>ID: ${props.station_id}<br>Elevation: ${props.elevation}m`);
-            
+
             // Center map on station
-            map.setView([coords[1], coords[0]], 10);
+            map.setView([coords[1], coords[0]], 13);
         }
-        
+
         // Show station info section
         document.getElementById('stationInfo').classList.add('visible');
     }
@@ -454,7 +454,7 @@
         const stationId = stationSelect.value;
         const dateSelectors = document.getElementById('dateSelectors');
         const stationInfo = document.getElementById('stationInfo');
-        
+
         if (stationId) {
             // Set current year and month
             const now = moment();
@@ -462,7 +462,7 @@
             monthSelect.value = now.month() + 1; // moment months are 0-11, select uses 1-12
             dateSelectors.style.display = 'flex';
             updateStationInfo(stationId);
-            loadStationData();
+            loadStationData(stationId);
         } else {
             dateSelectors.style.display = 'none';
             stationInfo.classList.remove('visible');
@@ -478,11 +478,10 @@
         let newDate = moment(`${year}-${month}-01`, 'YYYY-M-DD').add(direction, 'month');
         yearSelect.value = newDate.year();
         monthSelect.value = newDate.month() + 1; // moment months are 0-11, dropdown uses 1-12
-        loadStationData();
+        loadStationData(stationSelect.value);
     }
 
-    function loadStationData() {
-        const stationId = stationSelect.value;
+    function loadStationData(stationId) {
         const year = yearSelect.value;
         const month = monthSelect.value;
 
@@ -642,7 +641,7 @@
         // Get all station options (excluding the first empty option)
         const options = Array.from(stationSelect.options).slice(1);
         const currentIndex = options.findIndex(option => option.value === currentStationId);
-        
+
         if (currentIndex === -1) return;
 
         // Calculate new index with wrapping
@@ -659,17 +658,17 @@
 
         // Change to new station
         stationSelect.value = options[newIndex].value;
-        
+
         // Update station info
         updateStationInfo(options[newIndex].value);
-        
+
         // Restore year and month, then load data
         if (currentYear && currentMonth) {
             document.getElementById('yearSelect').value = currentYear;
             document.getElementById('monthSelect').value = currentMonth;
         }
-        
-        loadStationData();
+
+        loadStationData(stationSelect.value);
     }
 
     document.addEventListener('keydown', function (e) {
@@ -748,6 +747,15 @@
         }
         touchStartX = null;
         touchStartY = null;
+    });
+
+
+    // Set default station after loading, 1 second after page load
+    document.addEventListener('DOMContentLoaded', function () {
+        setTimeout(function () {
+            console.log("Setting default station to 19897");
+            updateStationInfo(stationSelect.value);
+        }, 50);
     });
 </script>
 </body>
