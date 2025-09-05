@@ -254,6 +254,28 @@
     }
     moment.locale('de');
 
+    // Prevent pull-to-refresh on mobile devices
+    let startY = 0;
+    let isPreventingPullToRefresh = false;
+
+    document.addEventListener('touchstart', function(e) {
+        startY = e.touches[0].pageY;
+        isPreventingPullToRefresh = window.pageYOffset === 0;
+    }, { passive: false });
+
+    document.addEventListener('touchmove', function(e) {
+        const currentY = e.touches[0].pageY;
+        const isScrollingDown = currentY > startY;
+        
+        if (isPreventingPullToRefresh && isScrollingDown) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+
+    // Additional prevention using overscroll-behavior
+    document.body.style.overscrollBehavior = 'contain';
+    document.documentElement.style.overscrollBehavior = 'contain';
+
     let STATIONS = {};
     let STATION_FEATURES = {};
     let map = null;
@@ -383,8 +405,10 @@
     });
 
     function initializeMap() {
-        // Initialize map centered on Germany
-        map = L.map('map').setView([51.1657, 10.4515], 6);
+        // Initialize map centered on Germany without zoom controls
+        map = L.map('map', {
+            zoomControl: false
+        }).setView([51.1657, 10.4515], 6);
         
         // Add OpenStreetMap tiles
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
