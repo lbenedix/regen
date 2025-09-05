@@ -1,5 +1,6 @@
 import json
 import urllib.request
+from datetime import datetime
 
 # URL of the station description file
 url = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/daily/more_precip/recent/RR_Tageswerte_Beschreibung_Stationen.txt"
@@ -34,6 +35,10 @@ for line in data[2:]:  # Skip header rows
     else:
         station['Bundesland'] = ' '.join(parts[-1:])
         station['Stationsname'] = ' '.join(parts[6:-1])
+
+    if int(datetime.now().strftime('%Y%m')) > int(station['bis_datum'][:6]):
+        print(f"Skipping inactive station: {station['Stations_id']} - {station['Stationsname']}")
+        continue
 
     stations.append(station)
 
