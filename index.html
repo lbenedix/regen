@@ -8,15 +8,63 @@
     <script src="https://cdn.jsdelivr.net/npm/moment@2.30.1/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.1/dist/chartjs-adapter-moment.min.js"></script>
     <style>
+        :root {
+            --bg-color: #f4f4f9;
+            --text-color: #333;
+            --card-bg: #fff;
+            --card-shadow: rgba(0, 0, 0, 0.1);
+            --button-bg: #007bff;
+            --button-hover: #0056b3;
+            --border-color: #ddd;
+            --input-bg: #fff;
+            --input-text: #333;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --text-color: #e0e0e0;
+            --card-bg: #2d2d2d;
+            --card-shadow: rgba(0, 0, 0, 0.3);
+            --button-bg: #0d6efd;
+            --button-hover: #0b5ed7;
+            --border-color: #404040;
+            --input-bg: #404040;
+            --input-text: #e0e0e0;
+        }
+
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
-            background-color: #f4f4f9;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         h1 {
             text-align: center;
-            color: #333;
+            color: var(--text-color);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--button-bg);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            font-size: 20px;
+            box-shadow: 0 2px 8px var(--card-shadow);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            z-index: 1000;
+        }
+
+        .theme-toggle:hover {
+            background: var(--button-hover);
+            transform: scale(1.1);
         }
 
         .select-container {
@@ -46,25 +94,32 @@
             font-size: 16px;
             border-radius: 5px;
             width: 200px;
+            background-color: var(--input-bg);
+            color: var(--input-text);
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
 
         button {
             padding: 10px;
             font-size: 16px;
             border-radius: 5px;
-            background-color: #007bff;
+            background-color: var(--button-bg);
             color: white;
             border: none;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color: var(--button-hover);
         }
 
         #stationSelect {
             width: 350px;
             min-width: 350px;
+            background-color: var(--input-bg);
+            color: var(--input-text);
         }
 
         .chart-container {
@@ -73,11 +128,12 @@
             height: 400px;
             margin: 20px auto;
             padding: 20px;
-            background-color: #fff;
+            background-color: var(--card-bg);
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 4px var(--card-shadow);
             position: relative;
             box-sizing: border-box;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         canvas {
@@ -87,6 +143,10 @@
     </style>
 </head>
 <body>
+
+<button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode">
+    🌙
+</button>
 
 <div class="select-container">
     <select id="stationSelect" onchange="handleStationChange()">
@@ -116,6 +176,66 @@
     moment.locale('de');
 
     let STATIONS = {};
+
+    // Dark mode functionality
+    function toggleTheme() {
+        const html = document.documentElement;
+        const toggleButton = document.querySelector('.theme-toggle');
+        const currentTheme = html.getAttribute('data-theme');
+        
+        if (currentTheme === 'dark') {
+            html.removeAttribute('data-theme');
+            toggleButton.textContent = '🌙';
+            localStorage.setItem('theme', 'light');
+        } else {
+            html.setAttribute('data-theme', 'dark');
+            toggleButton.textContent = '☀️';
+            localStorage.setItem('theme', 'dark');
+        }
+        
+        // Refresh chart if it exists to update colors
+        if (currentChart) {
+            updateChartColors();
+        }
+    }
+
+    // Load saved theme preference
+    function loadTheme() {
+        const savedTheme = localStorage.getItem('theme');
+        const html = document.documentElement;
+        const toggleButton = document.querySelector('.theme-toggle');
+        
+        if (savedTheme === 'dark') {
+            html.setAttribute('data-theme', 'dark');
+            toggleButton.textContent = '☀️';
+        } else {
+            html.removeAttribute('data-theme');
+            toggleButton.textContent = '🌙';
+        }
+    }
+
+    // Update chart colors based on theme
+    function updateChartColors() {
+        if (!currentChart) return;
+        
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        const textColor = isDark ? '#e0e0e0' : '#333';
+        const gridColor = isDark ? '#404040' : '#e0e0e0';
+        
+        currentChart.options.scales.x.ticks.color = textColor;
+        currentChart.options.scales.x.title.color = textColor;
+        currentChart.options.scales.x.grid.color = gridColor;
+        currentChart.options.scales.y.ticks.color = textColor;
+        currentChart.options.scales.y.title.color = textColor;
+        currentChart.options.scales.y.grid.color = gridColor;
+        currentChart.options.plugins.title.color = textColor;
+        currentChart.options.plugins.legend.labels.color = textColor;
+        
+        currentChart.update('none');
+    }
+
+    // Initialize theme on page load
+    document.addEventListener('DOMContentLoaded', loadTheme);
 
     // Load stations from GeoJSON file
     fetch('stations.geojson')
@@ -268,6 +388,11 @@
         container.appendChild(canvas);
         chartsContainer.appendChild(container);
 
+        // Get theme colors
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        const textColor = isDark ? '#e0e0e0' : '#333';
+        const gridColor = isDark ? '#404040' : '#e0e0e0';
+
         currentChart = new Chart(canvas, {
             type: 'bar',
             data: {
@@ -299,30 +424,47 @@
                         },
                         title: {
                             display: false,
-                            text: 'Date'
+                            text: 'Date',
+                            color: textColor
                         },
                         min: moment(`${year}-${month}-01`, 'YYYY-MM-DD').toDate(),
                         max: moment(`${year}-${month}-01`, 'YYYY-MM-DD').endOf('month').toDate(),
                         ticks: {
                             maxRotation: 90,
-                            minRotation: 90
+                            minRotation: 90,
+                            color: textColor
+                        },
+                        grid: {
+                            color: gridColor
                         }
-
                     },
                     y: {
                         title: {
                             display: true,
-                            text: 'Precipitation (mm)'
+                            text: 'Precipitation (mm)',
+                            color: textColor
                         },
                         beginAtZero: true,
                         min: 0,
-                        max: 50 // Set your desired max value
+                        max: 50, // Set your desired max value
+                        ticks: {
+                            color: textColor
+                        },
+                        grid: {
+                            color: gridColor
+                        }
                     }
                 },
                 plugins: {
                     title: {
                         display: true,
-                        text: `Precipitation for ${stationName} - ${moment(monthYear, 'YYYY-MM').format('MMMM YYYY')}`
+                        text: `Precipitation for ${stationName} - ${moment(monthYear, 'YYYY-MM').format('MMMM YYYY')}`,
+                        color: textColor
+                    },
+                    legend: {
+                        labels: {
+                            color: textColor
+                        }
                     }
                 }
             }
@@ -336,6 +478,41 @@
         }, 100);
     }
 
+    function changeStation(direction) {
+        const stationSelect = document.getElementById('stationSelect');
+        const currentStationId = stationSelect.value;
+        if (!currentStationId) return;
+
+        // Get all station options (excluding the first empty option)
+        const options = Array.from(stationSelect.options).slice(1);
+        const currentIndex = options.findIndex(option => option.value === currentStationId);
+        
+        if (currentIndex === -1) return;
+
+        // Calculate new index with wrapping
+        let newIndex = currentIndex + direction;
+        if (newIndex < 0) {
+            newIndex = options.length - 1; // Wrap to last station
+        } else if (newIndex >= options.length) {
+            newIndex = 0; // Wrap to first station
+        }
+
+        // Store current year and month before changing station
+        const currentYear = document.getElementById('yearSelect').value;
+        const currentMonth = document.getElementById('monthSelect').value;
+
+        // Change to new station
+        stationSelect.value = options[newIndex].value;
+        
+        // Restore year and month, then load data
+        if (currentYear && currentMonth) {
+            document.getElementById('yearSelect').value = currentYear;
+            document.getElementById('monthSelect').value = currentMonth;
+        }
+        
+        loadStationData();
+    }
+
     document.addEventListener('keydown', function (e) {
         // Only trigger if date selectors are visible
         const dateSelectors = document.getElementById('dateSelectors');
@@ -346,6 +523,12 @@
             e.preventDefault();
         } else if (e.key === 'ArrowRight') {
             changeMonth(1);
+            e.preventDefault();
+        } else if (e.key === 'ArrowUp') {
+            changeStation(-1); // Previous station
+            e.preventDefault();
+        } else if (e.key === 'ArrowDown') {
+            changeStation(1); // Next station
             e.preventDefault();
         }
     });
@@ -388,12 +571,20 @@
         const dateSelectors = document.getElementById('dateSelectors');
         if (dateSelectors.style.display !== 'flex') return;
 
-        // Check for horizontal swipe (ignore vertical movement)
+        // Check for horizontal swipe (change months)
         if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
             if (dx < 0) {
                 changeMonth(1); // Swipe left: next month
             } else {
                 changeMonth(-1); // Swipe right: previous month
+            }
+        }
+        // Check for vertical swipe (change stations)
+        else if (Math.abs(dy) > 50 && Math.abs(dy) > Math.abs(dx)) {
+            if (dy < 0) {
+                changeStation(-1); // Swipe up: previous station
+            } else {
+                changeStation(1); // Swipe down: next station
             }
         }
         touchStartX = null;
