@@ -26,6 +26,11 @@
             --input-text: #333;
         }
 
+        html {
+            /* Prevent pull-to-refresh on mobile browsers */
+            overscroll-behavior-y: contain;
+        }
+
         [data-theme="dark"] {
             --bg-color: #1a1a1a;
             --text-color: #e0e0e0;
@@ -44,6 +49,10 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             transition: background-color 0.3s ease, color 0.3s ease;
+            /* Prevent pull-to-refresh on mobile */
+            overscroll-behavior-y: contain;
+            /* Prevent bounce scrolling on iOS */
+            -webkit-overflow-scrolling: touch;
         }
 
         h1 {
