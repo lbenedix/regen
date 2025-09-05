@@ -4,6 +4,7 @@ import os
 import requests
 import zipfile
 from datetime import datetime
+import concurrent.futures
 
 # Load stations from GeoJSON file
 with open('stations.geojson', 'r', encoding='utf-8') as f:
@@ -12,8 +13,8 @@ with open('stations.geojson', 'r', encoding='utf-8') as f:
 STATIONS = {}
 for feature in geojson_data['features']:
     station_id = int(feature['properties']['station_id'])
-    if "Berlin" not in feature['properties']['station_name']:
-        continue
+    # if "Berlin" not in feature['properties']['station_name']:
+    #     continue
 
     if int(datetime.now().strftime('%Y%m')) > int(feature['properties']['end_date'][:6]):
         continue
@@ -102,7 +103,13 @@ def process(station_id):
 
 
 if __name__ == '__main__':
-    for station in STATIONS.keys():
-        download_file(station)
-        process(station)
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        futures = []
+        for station in STATIONS.keys():
+            futures.append(executor.submit(download_file, station))
+        concurrent.futures.wait(futures)
+        futures = []
+        for station in STATIONS.keys():
+            futures.append(executor.submit(process, station))
+        concurrent.futures.wait(futures)
         print('')

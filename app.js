@@ -116,18 +116,18 @@ function loadStations() {
             return response.json();
         })
         .then(geojsonData => {
-            const desiredStationIds = new Set([400, 403, 420, 426, 433, 17444, 17445, 17446, 17447, 17448, 17449, 17450,
-                17451, 17452, 17453, 17454, 17455, 17456, 17457, 17458, 17459, 17460, 17461,
-                17462, 17463, 17464, 17465, 17466, 17467, 17468, 17469, 17470, 17471, 17472,
-                17473, 17474, 17475, 17476, 17477, 17478, 17479, 17480, 17481, 17482, 17483,
-                17484, 17485, 17486, 17487, 17488, 17489, 17490, 17491, 19897, 19898]);
+            // const desiredStationIds = new Set([400, 403, 420, 426, 433, 17444, 17445, 17446, 17447, 17448, 17449, 17450,
+            //     17451, 17452, 17453, 17454, 17455, 17456, 17457, 17458, 17459, 17460, 17461,
+            //     17462, 17463, 17464, 17465, 17466, 17467, 17468, 17469, 17470, 17471, 17472,
+            //     17473, 17474, 17475, 17476, 17477, 17478, 17479, 17480, 17481, 17482, 17483,
+            //     17484, 17485, 17486, 17487, 17488, 17489, 17490, 17491, 19897, 19898]);
 
             geojsonData.features.forEach(feature => {
                 const stationId = parseInt(feature.properties.station_id);
-                if (desiredStationIds.has(stationId)) {
+                // if (desiredStationIds.has(stationId)) {
                     APP_STATE.STATIONS[stationId] = feature.properties.station_name;
                     APP_STATE.STATION_FEATURES[stationId] = feature;
-                }
+                // }
             });
 
             populateStationDropdown();
@@ -368,7 +368,6 @@ function loadStationData(stationId) {
     // Check if data is already cached
     if (APP_STATE.DATA_CACHE[cacheKey]) {
         processStationData(APP_STATE.DATA_CACHE[cacheKey], APP_STATE.STATIONS[stationId], year, month);
-        document.getElementById('loadingSpinner').style.display = 'none';
         return;
     }
 
@@ -383,12 +382,10 @@ function loadStationData(stationId) {
             // Cache the data
             APP_STATE.DATA_CACHE[cacheKey] = data;
             processStationData(data, APP_STATE.STATIONS[stationId], year, month);
-            document.getElementById('loadingSpinner').style.display = 'none';
         })
         .catch(error => {
             console.error('Error loading data:', error);
             showToast(`Error loading data: ${error.message}`, 'error');
-            document.getElementById('loadingSpinner').style.display = 'none';
             document.getElementById('charts').innerHTML = '';
             document.getElementById('statsContainer').classList.remove('visible');
         });
