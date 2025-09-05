@@ -7,6 +7,12 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/moment@2.30.1/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.1/dist/chartjs-adapter-moment.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
     <style>
         :root {
             --bg-color: #f4f4f9;
@@ -140,6 +146,58 @@
             display: block;
             box-sizing: border-box;
         }
+
+        .station-info {
+            max-width: 1000px;
+            width: 100%;
+            margin: 20px auto;
+            display: none;
+            gap: 20px;
+        }
+
+        .station-info.visible {
+            display: flex;
+        }
+
+        .map-container {
+            width: 300px;
+            height: 200px;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px var(--card-shadow);
+            overflow: hidden;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .station-details {
+            flex: 1;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px var(--card-shadow);
+            padding: 20px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .station-details h3 {
+            margin: 0 0 10px 0;
+            color: var(--text-color);
+        }
+
+        .station-details p {
+            margin: 5px 0;
+            color: var(--text-color);
+        }
+
+        @media (max-width: 768px) {
+            .station-info {
+                flex-direction: column;
+            }
+            
+            .map-container {
+                width: 100%;
+                height: 250px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -165,8 +223,20 @@
     <button onclick="changeMonth(1)">&rarr;</button>
 </div>
 
-
 <div id="charts"></div>
+
+<div class="station-info" id="stationInfo">
+    <div class="map-container">
+        <div id="map" style="width: 100%; height: 100%;"></div>
+    </div>
+    <div class="station-details">
+        <h3 id="stationName">Station Name</h3>
+        <p><strong>ID:</strong> <span id="stationId">-</span></p>
+        <p><strong>Elevation:</strong> <span id="stationElevation">-</span> m</p>
+        <p><strong>Federal State:</strong> <span id="stationState">-</span></p>
+        <p><strong>Coordinates:</strong> <span id="stationCoords">-</span></p>
+    </div>
+</div>
 
 <script>
     // Check if Chart.js is loaded
@@ -176,6 +246,9 @@
     moment.locale('de');
 
     let STATIONS = {};
+    let STATION_FEATURES = {};
+    let map = null;
+    let currentMarker = null;
 
     // Dark mode functionality
     function toggleTheme() {
@@ -246,16 +319,18 @@
                                               17451, 17452, 17453, 17454, 17455, 17456, 17457, 17458, 17459, 17460, 17461, 
                                               17462, 17463, 17464, 17465, 17466, 17467, 17468, 17469, 17470, 17471, 17472, 
                                               17473, 17474, 17475, 17476, 17477, 17478, 17479, 17480, 17481, 17482, 17483, 
-                                              17484, 17485, 17486, 17487, 17488, 17489, 17490, 17491, 19897, 19898, 721]);
+                                              17484, 17485, 17486, 17487, 17488, 17489, 17490, 17491, 19897, 19898]);
             
             geojsonData.features.forEach(feature => {
                 const stationId = parseInt(feature.properties.station_id);
                 if (desiredStationIds.has(stationId)) {
                     STATIONS[stationId] = feature.properties.station_name;
+                    STATION_FEATURES[stationId] = feature;
                 }
             });
             
             populateStationDropdown();
+            initializeMap();
         })
         .catch(error => {
             console.error('Error loading stations:', error);
@@ -298,18 +373,66 @@
         monthSelect.appendChild(option);
     });
 
+    function initializeMap() {
+        // Initialize map centered on Germany
+        map = L.map('map').setView([51.1657, 10.4515], 6);
+        
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+    }
+
+    function updateStationInfo(stationId) {
+        const feature = STATION_FEATURES[stationId];
+        if (!feature) return;
+        
+        const props = feature.properties;
+        const coords = feature.geometry.coordinates;
+        
+        // Update station details
+        document.getElementById('stationName').textContent = props.station_name;
+        document.getElementById('stationId').textContent = props.station_id;
+        document.getElementById('stationElevation').textContent = props.elevation || 'N/A';
+        document.getElementById('stationState').textContent = props.federal_state || 'N/A';
+        document.getElementById('stationCoords').textContent = `${coords[1].toFixed(4)}, ${coords[0].toFixed(4)}`;
+        
+        // Update map
+        if (map) {
+            // Remove previous marker
+            if (currentMarker) {
+                map.removeLayer(currentMarker);
+            }
+            
+            // Add new marker
+            currentMarker = L.marker([coords[1], coords[0]])
+                .addTo(map)
+                .bindPopup(`<b>${props.station_name}</b><br>ID: ${props.station_id}<br>Elevation: ${props.elevation}m`);
+            
+            // Center map on station
+            map.setView([coords[1], coords[0]], 10);
+        }
+        
+        // Show station info section
+        document.getElementById('stationInfo').classList.add('visible');
+    }
+
     function handleStationChange() {
         const stationId = stationSelect.value;
         const dateSelectors = document.getElementById('dateSelectors');
+        const stationInfo = document.getElementById('stationInfo');
+        
         if (stationId) {
             // Set current year and month
             const now = moment();
             yearSelect.value = now.year();
             monthSelect.value = now.month() + 1; // moment months are 0-11, select uses 1-12
             dateSelectors.style.display = 'flex';
+            updateStationInfo(stationId);
             loadStationData();
         } else {
             dateSelectors.style.display = 'none';
+            stationInfo.classList.remove('visible');
             document.getElementById('charts').innerHTML = '';
         }
     }
@@ -503,6 +626,9 @@
 
         // Change to new station
         stationSelect.value = options[newIndex].value;
+        
+        // Update station info
+        updateStationInfo(options[newIndex].value);
         
         // Restore year and month, then load data
         if (currentYear && currentMonth) {
