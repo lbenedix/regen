@@ -10,68 +10,68 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode">🌙</button>
-    <h1>Monthly Precipitation Charts</h1>
+<button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode">🌙</button>
+<h1>Monthly Precipitation Charts</h1>
 
-    <div class="select-container">
-        <select id="stationSelect" onchange="handleStationChange()">
-            <option value="">Select Station</option>
-        </select>
-    </div>
+<div class="select-container">
+    <select id="stationSelect" onchange="handleStationChange()">
+        <option value="">Select Station</option>
+    </select>
+</div>
 
-    <div class="date-selectors" id="dateSelectors">
-        <button onclick="changeMonth(-1)">&larr;</button>
-        <select id="yearSelect" onchange="loadStationData()">
-            <option value="">Select Year</option>
-        </select>
-        <select id="monthSelect" onchange="loadStationData()">
-            <option value="">Select Month</option>
-        </select>
-        <button onclick="changeMonth(1)">&rarr;</button>
-    </div>
+<div class="date-selectors" id="dateSelectors">
+    <button onclick="changeMonth(-1)">&larr;</button>
+    <select id="yearSelect" onchange="loadStationData()">
+        <option value="">Select Year</option>
+    </select>
+    <select id="monthSelect" onchange="loadStationData()">
+        <option value="">Select Month</option>
+    </select>
+    <button onclick="changeMonth(1)">&rarr;</button>
+</div>
 
-    <div id="charts"></div>
+<div id="charts"></div>
 
-    <div class="stats-container" id="statsContainer">
-        <h2>Monthly Statistics</h2>
-        <div class="stats-grid">
-            <div class="stat-item">
-                <div class="stat-label">Total Precipitation</div>
-                <div class="stat-value" id="totalPrecipitation">-</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-label">Rainy Days</div>
-                <div class="stat-value" id="rainyDays">-</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-label">Daily Average</div>
-                <div class="stat-value" id="dailyAverage">-</div>
-            </div>
+<div class="stats-container" id="statsContainer">
+    <h2>Monthly Statistics</h2>
+    <div class="stats-grid">
+        <div class="stat-item">
+            <div class="stat-label">Total Precipitation</div>
+            <div class="stat-value" id="totalPrecipitation">-</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label">Rainy Days</div>
+            <div class="stat-value" id="rainyDays">-</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label">Daily Average</div>
+            <div class="stat-value" id="dailyAverage">-</div>
         </div>
     </div>
+</div>
 
-    <div class="station-info" id="stationInfo">
-        <div class="map-container">
-            <div id="map" style="width: 100%; height: 100%;"></div>
-        </div>
-        <div class="station-details">
-            <h3 id="stationName">Station Name</h3>
-            <p><strong>ID:</strong> <span id="stationId">-</span></p>
-            <p><strong>Elevation:</strong> <span id="stationElevation">-</span> m</p>
-            <p><strong>Federal State:</strong> <span id="stationState">-</span></p>
-            <p><strong>Coordinates:</strong> <span id="stationCoords">-</span></p>
-        </div>
+<div class="station-info" id="stationInfo">
+    <div class="map-container">
+        <div id="map" style="width: 100%; height: 100%;"></div>
     </div>
+    <div class="station-details">
+        <h3 id="stationName">Station Name</h3>
+        <p><strong>ID:</strong> <span id="stationId">-</span></p>
+        <p><strong>Elevation:</strong> <span id="stationElevation">-</span> m</p>
+        <p><strong>Federal State:</strong> <span id="stationState">-</span></p>
+        <p><strong>Coordinates:</strong> <span id="stationCoords">-</span></p>
+    </div>
+</div>
 
-    <div class="toast-container" id="toastContainer"></div>
+<div class="toast-container" id="toastContainer"></div>
 
-    <!-- External Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/moment@2.30.1/moment.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.1/dist/chartjs-adapter-moment.min.js"></script>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-            crossorigin=""></script>
-    <script src="app.js"></script>
+<!-- External Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/moment@2.30.1/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.1/dist/chartjs-adapter-moment.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+<script src="app.js"></script>
 </body>
 </html>

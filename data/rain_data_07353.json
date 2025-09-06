@@ -1,9 +1,5 @@
 [
   {
-    "date": "2024-03-04",
-    "precipitation": 0.3
-  },
-  {
     "date": "2024-03-05",
     "precipitation": 1.7
   },
@@ -1792,6 +1788,126 @@
     "precipitation": 0.0
   },
   {
+    "date": "2025-06-13",
+    "precipitation": 0.0
+  },
+  {
+    "date": "2025-06-14",
+    "precipitation": 0.0
+  },
+  {
+    "date": "2025-06-15",
+    "precipitation": 9.4
+  },
+  {
+    "date": "2025-06-16",
+    "precipitation": 0.0
+  },
+  {
+    "date": "2025-06-17",
+    "precipitation": 0.0
+  },
+  {
+    "date": "2025-06-18",
+    "precipitation": 0.0
+  },
+  {
+    "date": "2025-06-19",
+    "precipitation": 0.0
+  },
+  {
+    "date": "2025-06-20",
+    "precipitation": 0.0
+  },
+  {
+    "date": "2025-06-21",
+    "precipitation": 0.0
+  },
+  {
+    "date": "2025-06-22",
+    "precipitation": 2.2
+  },
+  {
+    "date": "2025-06-23",
+    "precipitation": 0.0
+  },
+  {
+    "date": "2025-06-24",
+    "precipitation": 0.1
+  },
+  {
+    "date": "2025-06-25",
+    "precipitation": 0.0
+  },
+  {
+    "date": "2025-06-26",
+    "precipitation": 0.2
+  },
+  {
+    "date": "2025-06-27",
+    "precipitation": 3.3
+  },
+  {
+    "date": "2025-06-28",
+    "precipitation": 0.0
+  },
+  {
+    "date": "2025-06-29",
+    "precipitation": 0.0
+  },
+  {
+    "date": "2025-06-30",
+    "precipitation": 0.0
+  },
+  {
+    "date": "2025-07-01",
+    "precipitation": 0.0
+  },
+  {
+    "date": "2025-07-02",
+    "precipitation": 1.3
+  },
+  {
+    "date": "2025-07-03",
+    "precipitation": 0.2
+  },
+  {
+    "date": "2025-07-04",
+    "precipitation": 0.0
+  },
+  {
+    "date": "2025-07-05",
+    "precipitation": 0.0
+  },
+  {
+    "date": "2025-07-06",
+    "precipitation": 0.6
+  },
+  {
+    "date": "2025-07-07",
+    "precipitation": 10.7
+  },
+  {
+    "date": "2025-07-08",
+    "precipitation": 0.0
+  },
+  {
+    "date": "2025-07-09",
+    "precipitation": 0.6
+  },
+  {
+    "date": "2025-07-10",
+    "precipitation": 0.0
+  },
+  {
+    "date": "2025-07-11",
+    "precipitation": 3.4
+  },
+  {
+    "date": "2025-07-12",
+    "precipitation": 3.9
+  },
+  {
     "date": "2025-07-13",
     "precipitation": 2.9
   },
@@ -2006,5 +2122,9 @@
   {
     "date": "2025-09-04",
     "precipitation": 2.6
+  },
+  {
+    "date": "2025-09-05",
+    "precipitation": 0.4
   }
 ]

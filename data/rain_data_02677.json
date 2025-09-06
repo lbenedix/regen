@@ -1,9 +1,5 @@
 [
   {
-    "date": "2024-03-04",
-    "precipitation": 0.1
-  },
-  {
     "date": "2024-03-05",
     "precipitation": 0.3
   },
@@ -2181,7 +2177,7 @@
   },
   {
     "date": "2025-08-31",
-    "precipitation": 0.3
+    "precipitation": 0.2
   },
   {
     "date": "2025-09-01",
@@ -2189,14 +2185,18 @@
   },
   {
     "date": "2025-09-02",
-    "precipitation": 0.2
+    "precipitation": 0.0
   },
   {
     "date": "2025-09-03",
-    "precipitation": 3.2
+    "precipitation": 2.6
   },
   {
     "date": "2025-09-04",
     "precipitation": 11.5
+  },
+  {
+    "date": "2025-09-05",
+    "precipitation": 3.0
   }
 ]

@@ -36,8 +36,8 @@ for line in data[2:]:  # Skip header rows
         station['Bundesland'] = ' '.join(parts[-1:])
         station['Stationsname'] = ' '.join(parts[6:-1])
 
-    if int(datetime.now().strftime('%Y%m')) > int(station['bis_datum'][:6]):
-        print(f"Skipping inactive station: {station['Stations_id']} - {station['Stationsname']}")
+    if parts[-1] != "Frei" or int(datetime.now().strftime('%Y%m')) > int(station['bis_datum'][:6]):
+        print(f"Skipping inactive or non-Frei station: {station['Stations_id']} - {station['Stationsname']}")
         continue
 
     stations.append(station)
