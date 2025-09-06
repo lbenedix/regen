@@ -352,6 +352,9 @@ function changeMonth(direction) {
 }
 
 function loadStationData(stationId) {
+    if (!stationId) {
+        stationId = stationSelect.value;
+    };
     const year = document.getElementById('yearSelect').value;
     const month = document.getElementById('monthSelect').value;
 
