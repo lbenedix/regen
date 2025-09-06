@@ -642,12 +642,6 @@ document.addEventListener('touchend', function (e) {
         } else {
             changeMonth(-1);
         }
-    } else if (Math.abs(dy) > 50 && Math.abs(dy) > Math.abs(dx)) {
-        if (dy < 0) {
-            changeStation(-1);
-        } else {
-            changeStation(1);
-        }
     }
 
     touchStartX = null;
