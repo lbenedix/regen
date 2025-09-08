@@ -630,5 +630,9 @@
   {
     "date": "2025-09-05",
     "precipitation": 2.6
+  },
+  {
+    "date": "2025-09-06",
+    "precipitation": 0.0
   }
 ]
