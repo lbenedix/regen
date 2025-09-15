@@ -1597,14 +1597,46 @@
   },
   {
     "date": "2025-09-04",
-    "precipitation": 2.1
+    "precipitation": 6.0
   },
   {
     "date": "2025-09-05",
-    "precipitation": 4.1
+    "precipitation": 0.2
   },
   {
     "date": "2025-09-06",
     "precipitation": 0.0
+  },
+  {
+    "date": "2025-09-07",
+    "precipitation": 0.0
+  },
+  {
+    "date": "2025-09-08",
+    "precipitation": 0.0
+  },
+  {
+    "date": "2025-09-09",
+    "precipitation": 3.2
+  },
+  {
+    "date": "2025-09-10",
+    "precipitation": 0.4
+  },
+  {
+    "date": "2025-09-11",
+    "precipitation": 2.3
+  },
+  {
+    "date": "2025-09-12",
+    "precipitation": 0.0
+  },
+  {
+    "date": "2025-09-13",
+    "precipitation": 0.0
+  },
+  {
+    "date": "2025-09-14",
+    "precipitation": 1.7
   }
 ]

@@ -1,37 +1,5 @@
 [
   {
-    "date": "2024-03-06",
-    "precipitation": 0.1
-  },
-  {
-    "date": "2024-03-07",
-    "precipitation": 0.0
-  },
-  {
-    "date": "2024-03-08",
-    "precipitation": 0.0
-  },
-  {
-    "date": "2024-03-09",
-    "precipitation": 0.0
-  },
-  {
-    "date": "2024-03-10",
-    "precipitation": 0.0
-  },
-  {
-    "date": "2024-03-11",
-    "precipitation": 0.0
-  },
-  {
-    "date": "2024-03-12",
-    "precipitation": 0.0
-  },
-  {
-    "date": "2024-03-13",
-    "precipitation": 0.0
-  },
-  {
     "date": "2024-03-14",
     "precipitation": 0.1
   },
@@ -1209,111 +1177,111 @@
   },
   {
     "date": "2025-01-02",
-    "precipitation": 0
+    "precipitation": 1.5
   },
   {
     "date": "2025-01-03",
-    "precipitation": 0
+    "precipitation": 0.9
   },
   {
     "date": "2025-01-04",
-    "precipitation": 0
+    "precipitation": 0.0
   },
   {
     "date": "2025-01-05",
-    "precipitation": 0
+    "precipitation": 8.2
   },
   {
     "date": "2025-01-06",
-    "precipitation": 0
+    "precipitation": 0.0
   },
   {
     "date": "2025-01-07",
-    "precipitation": 0
+    "precipitation": 0.0
   },
   {
     "date": "2025-01-08",
-    "precipitation": 0
+    "precipitation": 1.4
   },
   {
     "date": "2025-01-09",
-    "precipitation": 0
+    "precipitation": 4.5
   },
   {
     "date": "2025-01-10",
-    "precipitation": 0
+    "precipitation": 2.2
   },
   {
     "date": "2025-01-11",
-    "precipitation": 0
+    "precipitation": 0.8
   },
   {
     "date": "2025-01-12",
-    "precipitation": 0
+    "precipitation": 0.0
   },
   {
     "date": "2025-01-13",
-    "precipitation": 0
+    "precipitation": 0.0
   },
   {
     "date": "2025-01-14",
-    "precipitation": 0
+    "precipitation": 5.2
   },
   {
     "date": "2025-01-15",
-    "precipitation": 0
+    "precipitation": 2.0
   },
   {
     "date": "2025-01-16",
-    "precipitation": 0
+    "precipitation": 0.0
   },
   {
     "date": "2025-01-17",
-    "precipitation": 0
+    "precipitation": 0.0
   },
   {
     "date": "2025-01-18",
-    "precipitation": 0
+    "precipitation": 0.0
   },
   {
     "date": "2025-01-19",
-    "precipitation": 0
+    "precipitation": 0.0
   },
   {
     "date": "2025-01-20",
-    "precipitation": 0
+    "precipitation": 0.0
   },
   {
     "date": "2025-01-21",
-    "precipitation": 0
+    "precipitation": 0.0
   },
   {
     "date": "2025-01-22",
-    "precipitation": 0
+    "precipitation": 0.0
   },
   {
     "date": "2025-01-23",
-    "precipitation": 0
+    "precipitation": 1.0
   },
   {
     "date": "2025-01-24",
-    "precipitation": 0
+    "precipitation": 0.1
   },
   {
     "date": "2025-01-25",
-    "precipitation": 0
+    "precipitation": 0.7
   },
   {
     "date": "2025-01-26",
-    "precipitation": 0
+    "precipitation": 0.5
   },
   {
     "date": "2025-01-27",
-    "precipitation": 0
+    "precipitation": 0.6
   },
   {
     "date": "2025-01-28",
-    "precipitation": 0
+    "precipitation": 9.4
   },
   {
     "date": "2025-01-29",
@@ -2198,5 +2166,37 @@
   {
     "date": "2025-09-06",
     "precipitation": 0.0
+  },
+  {
+    "date": "2025-09-07",
+    "precipitation": 0.0
+  },
+  {
+    "date": "2025-09-08",
+    "precipitation": 0.0
+  },
+  {
+    "date": "2025-09-09",
+    "precipitation": 0.0
+  },
+  {
+    "date": "2025-09-10",
+    "precipitation": 32.4
+  },
+  {
+    "date": "2025-09-11",
+    "precipitation": 0.4
+  },
+  {
+    "date": "2025-09-12",
+    "precipitation": 1.0
+  },
+  {
+    "date": "2025-09-13",
+    "precipitation": 0.0
+  },
+  {
+    "date": "2025-09-14",
+    "precipitation": 4.1
   }
 ]
