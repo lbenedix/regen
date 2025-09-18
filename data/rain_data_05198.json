@@ -1,9 +1,5 @@
 [
   {
-    "date": "2024-03-15",
-    "precipitation": 1.0
-  },
-  {
     "date": "2024-03-16",
     "precipitation": 1.5
   },
@@ -2185,11 +2181,11 @@
   },
   {
     "date": "2025-09-12",
-    "precipitation": 0.0
+    "precipitation": 1.5
   },
   {
     "date": "2025-09-13",
-    "precipitation": 1.7
+    "precipitation": 0.2
   },
   {
     "date": "2025-09-14",
