@@ -1,25 +1,5 @@
 [
   {
-    "date": "2024-03-16",
-    "precipitation": 0.0
-  },
-  {
-    "date": "2024-03-17",
-    "precipitation": 0.5
-  },
-  {
-    "date": "2024-03-18",
-    "precipitation": 0.0
-  },
-  {
-    "date": "2024-03-19",
-    "precipitation": 0.0
-  },
-  {
-    "date": "2024-03-20",
-    "precipitation": 0.0
-  },
-  {
     "date": "2024-03-21",
     "precipitation": 0.0
   },
@@ -2149,11 +2129,11 @@
   },
   {
     "date": "2025-09-04",
-    "precipitation": 0.0
+    "precipitation": 3.5
   },
   {
     "date": "2025-09-05",
-    "precipitation": 0.0
+    "precipitation": 0.1
   },
   {
     "date": "2025-09-06",
@@ -2161,34 +2141,42 @@
   },
   {
     "date": "2025-09-07",
-    "precipitation": 0.0
+    "precipitation": 0.5
   },
   {
     "date": "2025-09-08",
-    "precipitation": 24.2
+    "precipitation": 10.0
   },
   {
     "date": "2025-09-09",
-    "precipitation": 3.8
+    "precipitation": 14.5
   },
   {
     "date": "2025-09-10",
-    "precipitation": 7.5
+    "precipitation": 1.0
   },
   {
     "date": "2025-09-11",
-    "precipitation": 0.0
+    "precipitation": 7.0
   },
   {
     "date": "2025-09-12",
-    "precipitation": 11.0
+    "precipitation": 2.5
   },
   {
     "date": "2025-09-13",
-    "precipitation": 15.5
+    "precipitation": 10.0
   },
   {
     "date": "2025-09-14",
     "precipitation": 0
+  },
+  {
+    "date": "2025-09-20",
+    "precipitation": 7.5
+  },
+  {
+    "date": "2025-09-21",
+    "precipitation": 3.0
   }
 ]
