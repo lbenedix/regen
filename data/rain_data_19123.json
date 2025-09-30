@@ -1,33 +1,5 @@
 [
   {
-    "date": "2024-03-21",
-    "precipitation": 0.1
-  },
-  {
-    "date": "2024-03-22",
-    "precipitation": 0.1
-  },
-  {
-    "date": "2024-03-23",
-    "precipitation": 0.9
-  },
-  {
-    "date": "2024-03-24",
-    "precipitation": 1.4
-  },
-  {
-    "date": "2024-03-25",
-    "precipitation": 0.4
-  },
-  {
-    "date": "2024-03-26",
-    "precipitation": 0.1
-  },
-  {
-    "date": "2024-03-27",
-    "precipitation": 0.0
-  },
-  {
     "date": "2024-03-28",
     "precipitation": 0.5
   },

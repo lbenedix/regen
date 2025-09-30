@@ -2125,7 +2125,7 @@
   },
   {
     "date": "2025-09-19",
-    "precipitation": 0
+    "precipitation": 0.0
   },
   {
     "date": "2025-09-20",
@@ -2134,5 +2134,33 @@
   {
     "date": "2025-09-21",
     "precipitation": 12.8
+  },
+  {
+    "date": "2025-09-22",
+    "precipitation": 8.3
+  },
+  {
+    "date": "2025-09-23",
+    "precipitation": 0.0
+  },
+  {
+    "date": "2025-09-24",
+    "precipitation": 22.1
+  },
+  {
+    "date": "2025-09-25",
+    "precipitation": 4.8
+  },
+  {
+    "date": "2025-09-26",
+    "precipitation": 0
+  },
+  {
+    "date": "2025-09-27",
+    "precipitation": 0.0
+  },
+  {
+    "date": "2025-09-28",
+    "precipitation": 0.0
   }
 ]
